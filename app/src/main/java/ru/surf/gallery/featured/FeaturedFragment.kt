@@ -33,14 +33,13 @@ class FeaturedFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_featured_list, container, false)
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = FeaturedPostRecyclerViewAdapter(PlaceholderContent.ITEMS)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
+        with(recyclerView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = FeaturedPostRecyclerViewAdapter(PlaceholderContent.ITEMS)
         }
         return view
     }

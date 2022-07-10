@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mainFragment"
+        android:enabled="true"
+        android:icon="@drawable/home_line"
+        android:title="Главная" />
+    <item
+        android:id="@+id/featuredFragment"
+        android:enabled="true"
+        android:icon="@drawable/heart_line"
+        android:title="Избранное" />
+    <item
+        android:id="@+id/fragmentProfile"
+        android:enabled="true"
+        android:icon="@drawable/emotion_line"
+        android:title="Профиль" />
+</menu>

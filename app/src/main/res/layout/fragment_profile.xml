@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".profile.FragmentProfile">
 
+    <Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="Профиль"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="wrap_content"
@@ -13,7 +22,7 @@
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
     <TextView
         android:id="@+id/name"
@@ -22,7 +31,7 @@
         android:layout_marginStart="16dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
         tools:text="Александра
 Новикова" />
 

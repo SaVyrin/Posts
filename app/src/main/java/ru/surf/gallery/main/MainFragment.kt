@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.surf.gallery.R
 import ru.surf.gallery.main.placeholder.PlaceholderContent
 
@@ -33,15 +34,15 @@ class MainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main_list, container, false)
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MainPostRecyclerViewAdapter(PlaceholderContent.ITEMS)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
+        with(recyclerView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = MainPostRecyclerViewAdapter(PlaceholderContent.ITEMS)
         }
+
         return view
     }
 

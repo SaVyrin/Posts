@@ -1,15 +1,17 @@
 package ru.surf.gallery.login
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
 
-    var loginStatus = NOT_LOGGED_IN
+    private val _loginStatus = MutableLiveData(NOT_LOGGED_IN)
+    val loginStatus: LiveData<Int> = _loginStatus
 
     fun logInUser(login: String, password: String) {
      // TODO("логин")
-        loginStatus = LOGGED_IN
+        _loginStatus.value = LOGGED_IN
     }
 
     companion object {

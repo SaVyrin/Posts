@@ -30,9 +30,15 @@ class LoginFragment : Fragment() {
             val password = binding.etPassword.text.toString()
 
             viewModel.logInUser(login, password)
-            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
         }
 
+        viewModel.loginStatus.observe(viewLifecycleOwner) { newValue ->
+            when (newValue) {
+                LoginViewModel.LOGGED_IN -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                }
+            }
+        }
         return view
     }
 

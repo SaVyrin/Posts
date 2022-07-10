@@ -1,48 +1,46 @@
 package ru.surf.gallery.main
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import ru.surf.gallery.R
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import ru.surf.gallery.Post
 import ru.surf.gallery.databinding.FragmentMainBinding
 
-import ru.surf.gallery.main.placeholder.PlaceholderContent.PlaceholderItem
-
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
-class MainPostRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
-) : RecyclerView.Adapter<MainPostRecyclerViewAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            FragmentMainBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-
+class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
+    ListAdapter<Post, MainPostRecyclerViewAdapter.PostItemViewHolder>(PostDiffItemCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
+        return PostItemViewHolder.inflateFrom(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
+    override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bind(item, clickListener)
     }
 
-    override fun getItemCount(): Int = values.size
+    class PostItemViewHolder(val binding: FragmentMainBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    inner class ViewHolder(binding: FragmentMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.tvPostName
+        companion object {
+            fun inflateFrom(parent: ViewGroup): PostItemViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = FragmentMainBinding.inflate(layoutInflater, parent, false)
+                return PostItemViewHolder(binding)
+            }
+        }
 
-        override fun toString(): String {
-            return super.toString() + " '" + idView.text + "'"
+        fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
+            binding.tvPostName.text = item.postName
+            binding.root.setOnClickListener { clickListener(item.postId) }
         }
     }
 
+    class PostDiffItemCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
+            (oldItem.postId == newItem.postId)
+
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
+            (oldItem == newItem)
+    }
 }

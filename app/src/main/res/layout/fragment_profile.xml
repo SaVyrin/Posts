@@ -32,7 +32,7 @@
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        tools:text="Александра
+        android:text="Александра
 Новикова" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@id/name"
-        tools:text="“Светлое будущее живет
+        android:text="“Светлое будущее живет
 в вечности”" />
 
     <TextView

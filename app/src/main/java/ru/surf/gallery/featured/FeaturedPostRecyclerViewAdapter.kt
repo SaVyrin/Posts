@@ -1,47 +1,46 @@
 package ru.surf.gallery.featured
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import ru.surf.gallery.Post
 import ru.surf.gallery.databinding.FragmentFeaturedBinding
 
-import ru.surf.gallery.featured.placeholder.PlaceholderContent.PlaceholderItem
-
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
-class FeaturedPostRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
-) : RecyclerView.Adapter<FeaturedPostRecyclerViewAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            FragmentFeaturedBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-
+class FeaturedPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
+    ListAdapter<Post, FeaturedPostRecyclerViewAdapter.PostItemViewHolder>(PostDiffItemCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
+        return PostItemViewHolder.inflateFrom(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.contentView.text = item.content
+    override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bind(item, clickListener)
     }
 
-    override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(binding: FragmentFeaturedBinding) :
+    class PostItemViewHolder(val binding: FragmentFeaturedBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val contentView: TextView = binding.content
 
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+        companion object {
+            fun inflateFrom(parent: ViewGroup): PostItemViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = FragmentFeaturedBinding.inflate(layoutInflater, parent, false)
+                return PostItemViewHolder(binding)
+            }
+        }
+
+        fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
+            binding.name.text = item.postName
+            binding.root.setOnClickListener { clickListener(item.postId) }
         }
     }
 
+    class PostDiffItemCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
+            (oldItem.postId == newItem.postId)
+
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
+            (oldItem == newItem)
+    }
 }

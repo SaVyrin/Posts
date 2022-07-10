@@ -1,19 +1,17 @@
 package ru.surf.gallery.featured
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ru.surf.gallery.Post
 import ru.surf.gallery.R
-import ru.surf.gallery.featured.placeholder.PlaceholderContent
 
-/**
- * A fragment representing a list of Items.
- */
 class FeaturedFragment : Fragment() {
 
     private var columnCount = 1
@@ -39,7 +37,24 @@ class FeaturedFragment : Fragment() {
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
-            adapter = FeaturedPostRecyclerViewAdapter(PlaceholderContent.ITEMS)
+
+            val featuredAdapter = FeaturedPostRecyclerViewAdapter {
+                print("sdfsd")
+                findNavController().navigate(R.id.action_featuredFragment_to_postFragment)
+            }
+            featuredAdapter.submitList(
+                listOf(
+                    Post(1, "1stName"),
+                    Post(2, "2ndName"),
+                    Post(3, "3rdName"),
+                    Post(4, "4thName"),
+                    Post(5, "5thName"),
+                    Post(6, "6thName"),
+                    Post(7, "7thName"),
+                    Post(8, "8thName"),
+                )
+            )
+            adapter = featuredAdapter
         }
         return view
     }

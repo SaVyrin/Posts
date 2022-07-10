@@ -9,13 +9,13 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:contentDescription="TODO"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/name"
@@ -26,7 +26,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image"
-        tools:text="Первый день в Surf" />
+        android:text="Первый день в Surf" />
 
     <TextView
         android:id="@+id/date"
@@ -37,7 +37,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/name"
-        tools:text="12.05.2022" />
+        android:text="12.05.2022" />
 
 
     <TextView
@@ -49,5 +49,5 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
-        tools:text="Сегодня был мой первый день в студии Surf..." />
+        android:text="Сегодня был мой первый день в студии Surf..." />
 </androidx.constraintlayout.widget.ConstraintLayout>

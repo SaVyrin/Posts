@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.surf.gallery.Post
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.R
 
 class FeaturedFragment : Fragment() {

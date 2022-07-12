@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import ru.surf.gallery.Post
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.R
 
 class MainFragment : Fragment() {

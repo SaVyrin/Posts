@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.surf.gallery.Post
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentMainBinding
 
 class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :

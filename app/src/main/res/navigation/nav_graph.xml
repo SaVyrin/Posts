@@ -22,8 +22,7 @@
         <action
             android:id="@+id/action_mainFragment_to_postFragment"
             app:destination="@id/postFragment"
-            app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/featuredFragment"
@@ -32,9 +31,7 @@
         tools:layout="@layout/fragment_featured_list" >
         <action
             android:id="@+id/action_featuredFragment_to_postFragment"
-            app:destination="@id/postFragment"
-            app:popUpTo="@id/featuredFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/postFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"

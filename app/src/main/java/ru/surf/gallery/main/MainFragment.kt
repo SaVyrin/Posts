@@ -52,9 +52,13 @@ class MainFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter() {
-        val mainAdapter = MainPostRecyclerViewAdapter {
-            print("sdfsd")
-            findNavController().navigate(R.id.action_mainFragment_to_postFragment)
+        val mainAdapter = MainPostRecyclerViewAdapter { post ->
+            lifecycleScope.launch {
+                viewModel.featuredIconClicked(post)
+            }
+            /*
+                print("sdfsd")
+                findNavController().navigate(R.id.action_mainFragment_to_postFragment)*/
         }
 
         binding.list.adapter = mainAdapter

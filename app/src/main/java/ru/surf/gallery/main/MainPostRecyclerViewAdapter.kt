@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import ru.surf.gallery.R
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentMainBinding
 
-class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
+class MainPostRecyclerViewAdapter(private val featuredClickListener: (post: Post) -> Unit) :
     ListAdapter<Post, MainPostRecyclerViewAdapter.PostItemViewHolder>(PostDiffItemCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
         return PostItemViewHolder.inflateFrom(parent)
@@ -17,7 +18,7 @@ class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
 
     override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, clickListener)
+        holder.bind(item, featuredClickListener)
     }
 
     class PostItemViewHolder(val binding: FragmentMainBinding) :
@@ -31,10 +32,15 @@ class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
             }
         }
 
-        fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
+        fun bind(item: Post, featuredClickListener: (post: Post) -> Unit) {
             binding.tvPostName.text = item.title
             binding.postImage.load(item.photoUrl)
-            binding.root.setOnClickListener { clickListener(item.id.toLong()) }
+            when(item.inFeatured) {
+                true -> binding.featuredImage.load(R.drawable.ic_heart_fill)
+                false -> binding.featuredImage.load(R.drawable.ic_heart_line)
+            }
+            binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+            binding.root.setOnClickListener { /*clickListener(item.id.toLong())*/ }
         }
     }
 

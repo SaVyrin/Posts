@@ -41,7 +41,20 @@ class MainViewModel(
         postDao.insert(post)
     }
 
-    suspend fun addToFeatured() {
-        // TODO addToFeatured
+    suspend fun featuredIconClicked(post: Post) {
+        when (post.inFeatured) {
+            true -> removeFromFeatured(post)
+            false -> addToFeatured(post)
+        }
+    }
+
+    private suspend fun addToFeatured(post: Post) {
+        post.inFeatured = true
+        postDao.update(post)
+    }
+
+    private suspend fun removeFromFeatured(post: Post) {
+        post.inFeatured = false
+        postDao.update(post)
     }
 }

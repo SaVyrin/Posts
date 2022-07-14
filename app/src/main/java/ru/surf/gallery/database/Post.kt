@@ -3,7 +3,6 @@ package ru.surf.gallery.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.SerialName
 
 @Entity(tableName = "post_table")
 data class Post(
@@ -20,6 +19,9 @@ data class Post(
     @ColumnInfo(name = "photo_url")
     val photoUrl: String = "",
 
-    @ColumnInfo(name = "publication _date")
+    @ColumnInfo(name = "publication_date")
     val publicationDate: Long = 0,
+
+    @ColumnInfo(name = "post_in_featured")
+    var inFeatured: Boolean = false
 )

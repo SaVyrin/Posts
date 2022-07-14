@@ -33,8 +33,9 @@ class FeaturedPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit)
 
         fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
             binding.name.text = item.title
+            binding.content.text = item.content
+            binding.image.load(item.photoUrl)
             binding.date.text = item.publicationDate.toString()
-            //binding.image.load(item.postImagePath)
             binding.root.setOnClickListener { clickListener(item.id.toLong()) }
         }
     }

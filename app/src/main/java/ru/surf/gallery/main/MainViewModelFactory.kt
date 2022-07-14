@@ -16,6 +16,6 @@ class MainViewModelFactory(
         if (modelClass.isAssignableFrom(MainFragment::class.java)) {
             return MainViewModel(userTokenDao, postDao) as T
         }
-        return MainViewModel(userTokenDao, postDao) as T
+        return MainViewModel(userTokenDao, postDao) as T // TODO почему-то заходит сюда
     }
 }

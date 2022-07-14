@@ -11,47 +11,36 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.R
+import ru.surf.gallery.databinding.FragmentFeaturedListBinding
+import ru.surf.gallery.databinding.FragmentMainListBinding
 
 class FeaturedFragment : Fragment() {
 
-    private var columnCount = 1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    private var _binding: FragmentFeaturedListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_featured_list, container, false)
+        _binding = FragmentFeaturedListBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        // Set the adapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
-        with(recyclerView) {
-            layoutManager = when {
-                columnCount <= 1 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
-            }
-
+        with(binding.list) {
             val featuredAdapter = FeaturedPostRecyclerViewAdapter {
                 print("sdfsd")
                 findNavController().navigate(R.id.action_featuredFragment_to_postFragment)
             }
             featuredAdapter.submitList(
                 listOf(
-                    Post(1, "1stName"),
-                    Post(2, "2ndName"),
-                    Post(3, "3rdName"),
-                    Post(4, "4thName"),
-                    Post(5, "5thName"),
-                    Post(6, "6thName"),
-                    Post(7, "7thName"),
-                    Post(8, "8thName"),
+                    Post("1", "1stName"),
+                    Post("2", "2ndName"),
+                    Post("3", "3rdName"),
+                    Post("4", "4thName"),
+                    Post("5", "5thName"),
+                    Post("6", "6thName"),
+                    Post("7", "7thName"),
+                    Post("8", "8thName"),
                 )
             )
             adapter = featuredAdapter
@@ -59,18 +48,8 @@ class FeaturedFragment : Fragment() {
         return view
     }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            FeaturedFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

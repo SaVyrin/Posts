@@ -3,19 +3,23 @@ package ru.surf.gallery.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 
 @Entity(tableName = "post_table")
 data class Post(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "post_id")
-    var postId: Long = 0,
+    val id: String = "",
 
-    @ColumnInfo(name = "post_name")
-    var postName: String = "",
+    @ColumnInfo(name = "post_title")
+    val title: String = "",
 
-    @ColumnInfo(name = "post_date")
-    var postDate: String = "",
+    @ColumnInfo(name = "post_content")
+    val content: String ="",
 
-    @ColumnInfo(name = "post_image")
-    var postImagePath: String = ""
+    @ColumnInfo(name = "photo_url")
+    val photoUrl: String = "",
+
+    @ColumnInfo(name = "publication _date")
+    val publicationDate: Long = 0,
 )

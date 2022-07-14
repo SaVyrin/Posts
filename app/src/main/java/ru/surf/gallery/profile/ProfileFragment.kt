@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import coil.load
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
 
@@ -32,6 +33,7 @@ class FragmentProfile : Fragment() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
                 val user = it[0]
+                binding.avatar.load(user.avatar)
                 binding.name.text = "${user.firstName} ${user.lastName}"
                 binding.about.text = user.about
                 binding.phone.text = user.phone
@@ -41,5 +43,10 @@ class FragmentProfile : Fragment() {
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

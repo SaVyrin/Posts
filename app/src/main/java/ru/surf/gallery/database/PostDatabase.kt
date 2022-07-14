@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Post::class, User::class],
+    entities = [Post::class, User::class, UserToken::class],
     version = 1,
     exportSchema = false
 )
 abstract class PostDatabase : RoomDatabase() {
     abstract val postDao: PostDao
     abstract val userDao: UserDao
+    abstract val userTokenDao: UserTokenDao
 
     companion object {
         @Volatile

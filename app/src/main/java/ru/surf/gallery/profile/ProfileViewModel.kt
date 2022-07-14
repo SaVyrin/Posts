@@ -8,12 +8,9 @@ import ru.surf.gallery.login.LoginViewModel
 
 class ProfileViewModel(val userDao: UserDao) : ViewModel() {
 
-    private val _loginStatus = MutableLiveData(LoginViewModel.NOT_LOGGED_IN)
-    val loginStatus: LiveData<Int> = _loginStatus
-    var user = userDao.getAll()
-
+    val user = userDao.getAll()
 
     suspend fun logOutUser() {
-
+// TODO logOutUser
     }
 }

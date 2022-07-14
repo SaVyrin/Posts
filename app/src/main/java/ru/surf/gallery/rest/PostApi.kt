@@ -2,13 +2,9 @@ package ru.surf.gallery.rest
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
-import retrofit2.Call
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PostApi {
 
@@ -17,14 +13,17 @@ interface PostApi {
         @Body loginRequest: LoginRequest
     ): LoginResponse
 
-    @GET("cat?json=true")
-    suspend fun getPosts(@Query("tag") tag: String?): LoginResponse
+    @GET("picture")
+    suspend fun getPosts(
+        @Header(AUTHORIZATION_HEADER) loginToken: String
+    ): List<PostResponse>
 
     companion object {
         private const val BASE_URL = "https://pictures.chronicker.fun/api/"
+        private const val AUTHORIZATION_HEADER = "Authorization"
 
         fun create(): PostApi {
-            val contentType = MediaType.get("application/json")
+            val contentType = "application/json".toMediaType()
             val converterFactory = Json.asConverterFactory(contentType)
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)

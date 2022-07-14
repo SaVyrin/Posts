@@ -2,10 +2,11 @@ package ru.surf.gallery.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface PostDao {
-    @Insert
+    @Insert(onConflict = REPLACE) // TODO убрать onConflict
     suspend fun insert(post: Post)
 
     @Update

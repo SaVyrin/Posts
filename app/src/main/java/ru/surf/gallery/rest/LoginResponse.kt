@@ -6,6 +6,6 @@ import ru.surf.gallery.database.User
 
 @Serializable
 data class LoginResponse(
-    @SerialName("token") val token: String?,
+    @SerialName("token") val token: String,
     @SerialName("user_info") val userInfo: User
 )

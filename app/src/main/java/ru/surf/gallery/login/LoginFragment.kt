@@ -15,7 +15,7 @@ import ru.surf.gallery.databinding.FargmentLoginBinding
 
 class LoginFragment : Fragment() {
 
-    private lateinit var  loginViewModelFactory: LoginViewModelFactory
+    private lateinit var loginViewModelFactory: LoginViewModelFactory
     private val viewModel: LoginViewModel by viewModels { loginViewModelFactory }
 
     private var _binding: FargmentLoginBinding? = null
@@ -30,8 +30,10 @@ class LoginFragment : Fragment() {
         val view = binding.root
 
         val application = requireNotNull(this.activity).application
-        val userDao = PostDatabase.getInstance(application).userDao
-        loginViewModelFactory = LoginViewModelFactory(userDao)
+        val database = PostDatabase.getInstance(application)
+        val userTokenDao = database.userTokenDao
+        val userDao = database.userDao
+        loginViewModelFactory = LoginViewModelFactory(userTokenDao, userDao)
 
         binding.btnLogin.setOnClickListener {
             val login = binding.etLogin.text.toString()

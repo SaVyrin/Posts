@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentMainBinding
 
@@ -31,14 +32,15 @@ class MainPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
         }
 
         fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
-            binding.tvPostName.text = item.postName
-            binding.root.setOnClickListener { clickListener(item.postId) }
+            binding.tvPostName.text = item.title
+            binding.postImage.load(item.photoUrl)
+            binding.root.setOnClickListener { clickListener(item.id.toLong()) }
         }
     }
 
     class PostDiffItemCallback : DiffUtil.ItemCallback<Post>() {
         override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
-            (oldItem.postId == newItem.postId)
+            (oldItem.id == newItem.id)
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
             (oldItem == newItem)

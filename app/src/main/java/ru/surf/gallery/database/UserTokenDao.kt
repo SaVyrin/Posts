@@ -20,4 +20,6 @@ interface UserTokenDao {
 
     @Query("SELECT * FROM token_table")
     fun getAll(): LiveData<List<UserToken>>
+
+    // TODO сделать получение только 1 токена
 }

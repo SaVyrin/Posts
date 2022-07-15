@@ -3,16 +3,16 @@
     <item
         android:id="@+id/mainFragment"
         android:enabled="true"
-        android:icon="@drawable/home_line"
+        android:icon="@drawable/ic_home_line_menu"
         android:title="Главная" />
     <item
         android:id="@+id/featuredFragment"
         android:enabled="true"
-        android:icon="@drawable/heart_line"
+        android:icon="@drawable/ic_heart_line_menu"
         android:title="Избранное" />
     <item
         android:id="@+id/fragmentProfile"
         android:enabled="true"
-        android:icon="@drawable/emotion_line"
+        android:icon="@drawable/ic_emotion_line_menu"
         android:title="Профиль" />
 </menu>

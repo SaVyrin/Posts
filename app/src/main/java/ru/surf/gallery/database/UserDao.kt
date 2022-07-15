@@ -20,4 +20,6 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table")
     fun getAll(): LiveData<List<User>>
+
+    // TODO сделать получение только 1 юзера
 }

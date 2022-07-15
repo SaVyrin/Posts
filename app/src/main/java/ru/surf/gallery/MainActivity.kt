@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView3)
         bottomNavView.setupWithNavController(navController)
+        // TODO возможно из-за addOnDestinationChangedListener резкая смена экранов и запоминание menu табов в backstack
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.mainFragment -> bottomNavView.visibility = View.VISIBLE

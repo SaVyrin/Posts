@@ -3,6 +3,9 @@ package ru.surf.gallery
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,5 +22,13 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView3)
         bottomNavView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.mainFragment -> bottomNavView.visibility = View.VISIBLE
+                R.id.featuredFragment -> bottomNavView.visibility = View.VISIBLE
+                R.id.fragmentProfile -> bottomNavView.visibility = View.VISIBLE
+                else -> bottomNavView.visibility = View.GONE
+            }
+        }
     }
 }

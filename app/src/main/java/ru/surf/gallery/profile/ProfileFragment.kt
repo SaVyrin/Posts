@@ -10,7 +10,7 @@ import coil.load
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
 
-class FragmentProfile : Fragment() {
+class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModelFactory: ProfileViewModelFactory
     private val viewModel: ProfileViewModel by viewModels { profileViewModelFactory }

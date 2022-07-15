@@ -40,7 +40,7 @@ class FeaturedFragment : Fragment() {
 
     private fun setRecyclerViewAdapter() {
         val featuredAdapter = FeaturedPostRecyclerViewAdapter {
-            findNavController().navigate(R.id.action_mainFragment_to_postFragment)
+            findNavController().navigate(R.id.action_featuredFragment_to_postFragment)
         }
 
         binding.list.adapter = featuredAdapter

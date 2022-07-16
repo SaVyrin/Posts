@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LoginTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="errorTextColor">@color/error_text_color</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="boxStrokeErrorColor">@color/box_stroke_error_color</item>
+        <item name="errorTextAppearance">@style/Text.Regular.12</item>
+
+        <item name="hintTextAppearance">@style/Text.Medium.12</item>
+        <item name="hintTextColor">@color/hint_text_color</item>
+        <item name="android:textColorHint">@color/hint_text_color</item>
+
+        <item name="boxBackgroundColor">@color/box_background_color</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeColor">@drawable/box_stroke_color_selector</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+    </style>
+
+    <style name="LoginTextInputEditText">
+        <item name="android:textAppearance">@style/Text.Medium.16</item>
+    </style>
+
+    <style name="Button.Login" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+</resources>

@@ -6,4 +6,5 @@
     <string name="password">Пароль</string>
 
     <string name="btn_login">Войти</string>
+    <string name="login_title">Вход</string>
 </resources>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="inputs_bkg">@color/white_900</color>
+    <color name="box_background_color">@color/white_100</color>
+    <color name="error_text_color">@color/red</color>
+    <color name="box_stroke_error_color">@color/red</color>
+    <color name="hint_text_color">@color/gray_500</color>
+    <color name="box_stroke_color_focused">@color/gray_300</color>
+    <color name="box_stroke_color_unfocused">@color/gray_300</color>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/buttons_background_color"
+        android:foreground="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/button_text_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/Text.SemiBold.16"
+            android:textColor="@color/buttons_text_color"
+            tools:text="@string/btn_login" />
+
+        <ProgressBar
+            android:id="@+id/button_progress_bar"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/progress_bar_color"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</merge>

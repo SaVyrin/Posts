@@ -15,7 +15,7 @@
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/show_password_selector.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/font/fonts.xml" value="0.2835897435897436" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fargment_login.xml" value="0.4" />
+        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fargment_login.xml" value="0.264" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_featured.xml" value="0.4" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_featured_list.xml" value="0.264" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_login_fargment.xml" value="0.22826086956521738" />
@@ -24,6 +24,7 @@
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_post.xml" value="0.536" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/fragment_splash.xml" value="0.2" />
+        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/loader_button.xml" value="0.264" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/layout/login_fargment.xml" value="0.264" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.27447916666666666" />
       </map>

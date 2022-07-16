@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoaderButton">
+        <attr name="text" format="reference|string" />
+        <attr name="isLoading" format="boolean" />
+    </declare-styleable>
+</resources>

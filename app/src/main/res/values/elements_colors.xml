@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="status_bar_color">@color/white</color>
+    <color name="navigation_bar_color">@color/white</color>
     <color name="box_background_color">@color/white_100</color>
     <color name="error_text_color">@color/red</color>
     <color name="box_stroke_error_color">@color/red</color>

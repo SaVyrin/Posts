@@ -23,6 +23,9 @@
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@color/transparent
         </item>
 
+        <!-- Snackbar. -->
+        <item name="snackbarStyle">@style/ErrorSnackBar</item>
+        <item name="snackbarTextViewStyle">@style/ErrorSnackBarTextView</item>
     </style>
 
 </resources>

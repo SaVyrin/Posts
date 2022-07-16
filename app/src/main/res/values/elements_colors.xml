@@ -3,9 +3,9 @@
     <color name="status_bar_color">@color/white</color>
     <color name="navigation_bar_color">@color/white</color>
 
-    <color name="error_text_color">@color/red</color>
+    <color name="error_text_color">@color/red_100</color>
     <color name="hint_text_color">@color/gray_500</color>
-    <color name="box_stroke_error_color">@color/red</color>
+    <color name="box_stroke_error_color">@color/red_100</color>
     <color name="box_background_color">@color/white_100</color>
     <color name="box_stroke_color_focused">@color/gray_300</color>
     <color name="box_stroke_color_unfocused">@color/gray_300</color>
@@ -14,4 +14,8 @@
     <color name="buttons_text_color">@color/white</color>
 
     <color name="progress_bar_color">@color/white</color>
+
+    <color name="error_snack_bar_text_color">@color/white</color>
+    <color name="error_snack_bar_background_color">@color/red</color>
+
 </resources>

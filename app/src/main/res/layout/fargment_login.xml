@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
+            android:inputType="phone"
             android:nextFocusDown="@id/password"
             android:singleLine="true" />
 
@@ -92,6 +93,7 @@
         app:text="@string/btn_login" />
 
     <FrameLayout
+        android:id="@+id/block_screen"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/transparent"

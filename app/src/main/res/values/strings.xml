@@ -7,6 +7,7 @@
 
     <string name="btn_login">Войти</string>
     <string name="login_title">Вход</string>
+    <string name="main_title">Галерея</string>
 
     <string name="empty_field_error">Поле не может быть пустым</string>
     <string name="wrong_phone_number_format_error">Не верный формат номера телефона</string>

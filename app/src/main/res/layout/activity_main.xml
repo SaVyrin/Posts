@@ -25,6 +25,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu"/>
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemTextAppearanceActive="@style/Text.SemiBold.10"
+        app:itemTextAppearanceInactive="@style/Text.SemiBold.10"
+        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+        app:itemTextColor="@drawable/bottom_nav_text_color_selector"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

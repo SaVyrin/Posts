@@ -18,4 +18,12 @@
     <color name="error_snack_bar_text_color">@color/white</color>
     <color name="error_snack_bar_background_color">@color/red</color>
 
+
+    <color name="main_screen_post_title">@color/black</color>
+
+    <color name="bottom_nav_text_color_unchecked">@color/gray_500</color>
+    <color name="bottom_nav_text_color_checked">@color/black</color>
+    <color name="bottom_nav_icon_color_unchecked">@color/gray_500</color>
+    <color name="bottom_nav_icon_color_checked">@color/black</color>
+
 </resources>

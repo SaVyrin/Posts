@@ -50,6 +50,10 @@
         <item name="fontFamily">@font/montserrat_semi_bold</item>
     </style>
 
+    <style name="Text.SemiBold.10">
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="Text.SemiBold.16">
         <item name="android:textSize">16sp</item>
     </style>

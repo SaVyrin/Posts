@@ -56,7 +56,7 @@ class SplashFragment : Fragment() {
         return if (viewModel.isLoggedIn.value == SplashViewModel.NOT_LOGGED_IN) {
             R.id.action_splashFragment_to_loginFragment
         } else {
-            R.id.action_splashFragment_to_loginFragment
+            R.id.action_splashFragment_to_mainFragment
         }
     }
 }

@@ -109,13 +109,15 @@ class LoginFragment : Fragment() {
                     LoginStatus.ERROR -> {
                         binding.btnLogin.isLoading = false
                         binding.blockScreen.isVisible = false
+                        binding.login.error = " "
+                        binding.password.error = " "
                         Snackbar.make(
                             binding.root,
                             R.string.wrong_login_or_password_error,
                             Snackbar.LENGTH_LONG
                         ).setAnchorView(binding.btnLogin).show()
                     }
-                    LoginStatus.LOGIN_IN_PROGRESS -> {
+                    LoginStatus.IN_PROGRESS -> {
                         binding.btnLogin.isLoading = true
                         binding.blockScreen.isVisible = true
                     }
@@ -139,6 +141,7 @@ class LoginFragment : Fragment() {
                     }
                     LoginFieldStatus.VALID -> {
                         binding.login.error = null
+                        binding.login.isErrorEnabled = false
                     }
                 }
             }
@@ -157,6 +160,7 @@ class LoginFragment : Fragment() {
                     }
                     PasswordFieldStatus.VALID -> {
                         binding.password.error = null
+                        binding.password.isErrorEnabled = false
                     }
                 }
             }

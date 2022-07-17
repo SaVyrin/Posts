@@ -47,7 +47,7 @@ class LoginViewModel(
                 addTokenToDb(loginResponse.token)
                 addUserToDb(loginResponse.userInfo)
                 Log.e("Request", loginResponse.token)
-                mutableLoginStatus.value = LoginStatus.LOGGED_IN
+                mutableLoginStatus.value = LoginStatus.LOGGED_IN // TODO добавить обработку ошибок
             }
         }
     }

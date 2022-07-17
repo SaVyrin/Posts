@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
+import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
 import kotlinx.coroutines.launch
@@ -84,7 +86,15 @@ class LoginFragment : Fragment() {
         binding.etPassword.doOnTextChanged { password, _, _, _ ->
             password?.let {
                 viewModel.setPassword(password.toString())
+                setPasswordFieldEndIconMode(password.toString())
             }
+        }
+    }
+
+    private fun setPasswordFieldEndIconMode(password: String) {
+        when (password.isNotEmpty()) {
+            true -> binding.password.endIconMode = END_ICON_PASSWORD_TOGGLE
+            else -> binding.password.endIconMode = END_ICON_NONE
         }
     }
 

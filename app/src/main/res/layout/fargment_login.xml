@@ -52,11 +52,11 @@
         android:layout_marginTop="13dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/password"
-        app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
-        app:passwordToggleDrawable="@drawable/show_password_selector">
+        app:passwordToggleDrawable="@drawable/show_password_selector"
+        tools:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_password"
@@ -72,11 +72,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginBottom="50dp"
         android:src="@drawable/ic_surf_edu_login"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ru.surf.gallery.views.LoaderButton
         android:id="@+id/btn_login"

@@ -26,21 +26,14 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainListBinding.inflate(inflater, container, false)
-        val view = binding.root
-
         getViewModelFactory()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setRecyclerViewAdapter()
-
-        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
-            userToken?.let {
-                val userToken = userToken[0]
-                lifecycleScope.launch {
-                    viewModel.getPosts(userToken.token)
-                }
-            }
-        }
-
-        return view
+        observeUserToken()
     }
 
     private fun getViewModelFactory() {
@@ -52,17 +45,33 @@ class MainFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter() {
-        val mainAdapter = MainPostRecyclerViewAdapter { post ->
-            lifecycleScope.launch {
-                viewModel.featuredIconClicked(post)
+        val mainAdapter = MainPostRecyclerViewAdapter(
+            featuredClickListener = { post ->
+                lifecycleScope.launch {
+                    viewModel.featuredIconClicked(post)
+                }
+            },
+            navigateClickListener = { post ->
+                val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
+                this.findNavController().navigate(action)
             }
-            /*
-                print("sdfsd")
-                findNavController().navigate(R.id.action_mainFragment_to_postFragment)*/
-        }
-
+        )
         binding.list.adapter = mainAdapter
+        observePosts(mainAdapter)
+    }
 
+    private fun observeUserToken() {
+        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
+            userToken?.let {
+                val userToken = userToken[0]
+                lifecycleScope.launch {
+                    viewModel.getPosts(userToken.token)
+                }
+            }
+        }
+    }
+
+    private fun observePosts(mainAdapter: MainPostRecyclerViewAdapter) {
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             posts?.let {
                 mainAdapter.submitList(posts)

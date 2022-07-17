@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
+import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
 import kotlinx.coroutines.launch
@@ -84,7 +86,15 @@ class LoginFragment : Fragment() {
         binding.etPassword.doOnTextChanged { password, _, _, _ ->
             password?.let {
                 viewModel.setPassword(password.toString())
+                setPasswordFieldEndIconMode(password.toString())
             }
+        }
+    }
+
+    private fun setPasswordFieldEndIconMode(password: String) {
+        when (password.isNotEmpty()) {
+            true -> binding.password.endIconMode = END_ICON_PASSWORD_TOGGLE
+            else -> binding.password.endIconMode = END_ICON_NONE
         }
     }
 
@@ -99,13 +109,15 @@ class LoginFragment : Fragment() {
                     LoginStatus.ERROR -> {
                         binding.btnLogin.isLoading = false
                         binding.blockScreen.isVisible = false
+                        binding.login.error = " "
+                        binding.password.error = " "
                         Snackbar.make(
                             binding.root,
                             R.string.wrong_login_or_password_error,
                             Snackbar.LENGTH_LONG
                         ).setAnchorView(binding.btnLogin).show()
                     }
-                    LoginStatus.LOGIN_IN_PROGRESS -> {
+                    LoginStatus.IN_PROGRESS -> {
                         binding.btnLogin.isLoading = true
                         binding.blockScreen.isVisible = true
                     }
@@ -129,6 +141,7 @@ class LoginFragment : Fragment() {
                     }
                     LoginFieldStatus.VALID -> {
                         binding.login.error = null
+                        binding.login.isErrorEnabled = false
                     }
                 }
             }
@@ -147,6 +160,7 @@ class LoginFragment : Fragment() {
                     }
                     PasswordFieldStatus.VALID -> {
                         binding.password.error = null
+                        binding.password.isErrorEnabled = false
                     }
                 }
             }

@@ -29,11 +29,7 @@ class LoginFragment : Fragment() {
         _binding = FargmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val application = requireNotNull(this.activity).application
-        val database = PostDatabase.getInstance(application)
-        val userTokenDao = database.userTokenDao
-        val userDao = database.userDao
-        loginViewModelFactory = LoginViewModelFactory(userTokenDao, userDao)
+        getViewModelFactory()
 
         binding.btnLogin.setOnClickListener {
             val login = binding.etLogin.text.toString()
@@ -52,6 +48,14 @@ class LoginFragment : Fragment() {
             }
         }
         return view
+    }
+
+    private fun getViewModelFactory() {
+        val application = requireNotNull(this.activity).application
+        val database = PostDatabase.getInstance(application)
+        val userTokenDao = database.userTokenDao
+        val userDao = database.userDao
+        loginViewModelFactory = LoginViewModelFactory(userTokenDao, userDao)
     }
 
     override fun onDestroyView() {

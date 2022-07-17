@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.surf.gallery.database.User
 import ru.surf.gallery.database.UserDao
 import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.rest.LoginRequest
+import ru.surf.gallery.rest.LoginResponse
 import ru.surf.gallery.rest.PostApi
 
 class LoginViewModel(
@@ -19,42 +19,61 @@ class LoginViewModel(
     val userDao: UserDao
 ) : ViewModel() {
 
-    private val _loginStatus = MutableLiveData(NOT_LOGGED_IN)
-    val loginStatus: LiveData<Int> = _loginStatus
+    private val mutableLoginStatus = MutableLiveData(LoginStatus.NOT_LOGGED_IN)
+    val loginStatus: LiveData<LoginStatus> = mutableLoginStatus
 
-    suspend fun logInUser(login: String, password: String) {
-        viewModelScope.launch {
-            val postApi = PostApi.create()
-            val loginReq =
-                async {
-                    postApi.login(
-                        LoginRequest(
-                            "+71234567890",
-                            "qwerty"
-                        )
-                    )
-                }.await()
-            addTokenToDb(UserToken(loginReq.token))
-            addUserToDb(loginReq.userInfo)
-            Log.e("Request", loginReq.token)
-            _loginStatus.value = LOGGED_IN
+    private val mutableLoginFieldStatus = MutableLiveData<LoginFieldStatus>()
+    val loginFieldStatus: LiveData<LoginFieldStatus> = mutableLoginFieldStatus
+
+    private val mutablePasswordFieldStatus = MutableLiveData<PasswordFieldStatus>()
+    val passwordFieldStatus: LiveData<PasswordFieldStatus> = mutablePasswordFieldStatus
+
+    private var login = ""
+    private var password = ""
+
+    fun setLogin(newLoginValue: String) {
+        login = newLoginValue
+    }
+
+    fun setPassword(newPasswordValue: String) {
+        password = newPasswordValue
+    }
+
+    suspend fun logInUser() {
+        if (validateInputs()) {
+            viewModelScope.launch {
+                mutableLoginStatus.value = LoginStatus.LOGIN_IN_PROGRESS
+                val loginResponse = sendLoginRequest()
+                addTokenToDb(loginResponse.token)
+                addUserToDb(loginResponse.userInfo)
+                Log.e("Request", loginResponse.token)
+                mutableLoginStatus.value = LoginStatus.LOGGED_IN
+            }
         }
     }
 
+    private fun validateInputs(): Boolean {
+        val loginValidity = InputValidator.getLoginValidity(login)
+        val passwordValidity = InputValidator.getPasswordValidity(password)
+        mutableLoginFieldStatus.value = loginValidity
+        mutablePasswordFieldStatus.value = passwordValidity
 
-    suspend fun addTokenToDb(userToken: UserToken) {
-        userTokenDao.insert(userToken)
-        Log.e("Request", "SUCCESS")
+        return InputValidator.fieldsValid(loginValidity, passwordValidity)
     }
 
-    suspend fun addUserToDb(user: User) {
+    private suspend fun sendLoginRequest(): LoginResponse {
+        val postApi = PostApi.create()
+        return postApi.login(LoginRequest("+7$login", password))
+    }
+
+    private suspend fun addTokenToDb(tokenString: String) {
+        val userToken = UserToken(tokenString)
+        userTokenDao.insert(userToken)
+        Log.e("Request", "SUCCESS") // TODO убрать заменить или оставить логирование
+    }
+
+    private suspend fun addUserToDb(user: User) {
         userDao.insert(user)
         Log.e("Request", "SUCCESS")
-    }
-
-    companion object {
-        const val NOT_LOGGED_IN = 0
-        const val LOGGED_IN = 1
-        const val ERROR = 2
     }
 }

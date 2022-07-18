@@ -30,11 +30,13 @@ class MainFragment : Fragment() {
     ): View? {
         _binding = FragmentMainListBinding.inflate(inflater, container, false)
         getViewModelFactory()
+        // TODO добавить SwipeRefreshLayout
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setSearchClickListener()
         setRecyclerViewAdapter()
         observeUserToken()
         observePostsRequestStatus()
@@ -64,6 +66,12 @@ class MainFragment : Fragment() {
         observePosts(mainAdapter)
     }
 
+    private fun setSearchClickListener() {
+        binding.imageView.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+        }
+    }
+
     private fun observeUserToken() {
         viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
@@ -81,16 +89,19 @@ class MainFragment : Fragment() {
                 when (postsRequest) {
                     PostsRequestStatus.IN_PROGRESS -> {
                         binding.list.isVisible = false
+                        binding.imageView.isVisible = false
                         binding.navHostFragment.isVisible = true
                         Navigation.findNavController(binding.navHostFragment)
-                            .navigate(R.id.action_global_mainLoaderFragment)
+                            .navigate(R.id.mainLoaderFragment)
                     }
                     PostsRequestStatus.SUCCESS -> {
                         binding.list.isVisible = true
+                        binding.imageView.isVisible = true
                         binding.navHostFragment.isVisible = false
                     }
                     PostsRequestStatus.ERROR_RELOAD -> {
                         binding.list.isVisible = true
+                        binding.imageView.isVisible = true
                         binding.navHostFragment.isVisible = false
                         Snackbar.make(
                             binding.root,
@@ -100,9 +111,10 @@ class MainFragment : Fragment() {
                     }
                     PostsRequestStatus.ERROR_LOAD -> {
                         binding.list.isVisible = false
+                        binding.imageView.isVisible = false
                         binding.navHostFragment.isVisible = true
                         Navigation.findNavController(binding.navHostFragment)
-                            .navigate(R.id.action_global_mainErrorLoadFragment)
+                            .navigate(R.id.mainErrorLoadFragment)
                     }
                 }
             }

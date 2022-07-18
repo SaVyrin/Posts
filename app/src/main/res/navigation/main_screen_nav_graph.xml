@@ -15,10 +15,4 @@
         android:name="ru.surf.gallery.main.inner_fragments.MainLoaderFragment"
         android:label="fragment_main_loader"
         tools:layout="@layout/fragment_main_loader" />
-    <action
-        android:id="@+id/action_global_mainLoaderFragment"
-        app:destination="@id/mainLoaderFragment" />
-    <action
-        android:id="@+id/action_global_mainErrorLoadFragment"
-        app:destination="@id/mainErrorLoadFragment" />
 </navigation>

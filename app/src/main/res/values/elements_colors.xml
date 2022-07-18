@@ -31,4 +31,7 @@
     <color name="profile_sub_text_color">@color/gray_600</color>
     <color name="profile_main_text_color">@color/black</color>
 
+    <color name="post_sub_text_color">@color/gray_600</color>
+    <color name="post_main_text_color">@color/black</color>
+
 </resources>

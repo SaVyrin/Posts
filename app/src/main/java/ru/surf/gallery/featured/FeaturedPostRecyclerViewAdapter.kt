@@ -9,7 +9,10 @@ import coil.load
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentFeaturedBinding
 
-class FeaturedPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit) :
+class FeaturedPostRecyclerViewAdapter(
+    private val featuredClickListener: (post: Post) -> Unit,
+    private val navigateClickListener: (post: Post) -> Unit
+) :
     ListAdapter<Post, FeaturedPostRecyclerViewAdapter.PostItemViewHolder>(PostDiffItemCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
         return PostItemViewHolder.inflateFrom(parent)
@@ -17,7 +20,7 @@ class FeaturedPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit)
 
     override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, clickListener)
+        holder.bind(item, featuredClickListener, navigateClickListener)
     }
 
     class PostItemViewHolder(val binding: FragmentFeaturedBinding) :
@@ -31,12 +34,17 @@ class FeaturedPostRecyclerViewAdapter(val clickListener: (taskId: Long) -> Unit)
             }
         }
 
-        fun bind(item: Post, clickListener: (taskId: Long) -> Unit) {
+        fun bind(
+            item: Post,
+            featuredClickListener: (post: Post) -> Unit,
+            navigateClickListener: (post: Post) -> Unit
+        ) {
             binding.name.text = item.title
             binding.content.text = item.content
             binding.image.load(item.photoUrl)
             binding.date.text = item.publicationDate.toString()
-            binding.root.setOnClickListener { clickListener(item.id.toLong()) }
+            binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+            binding.root.setOnClickListener { navigateClickListener(item) }
         }
     }
 

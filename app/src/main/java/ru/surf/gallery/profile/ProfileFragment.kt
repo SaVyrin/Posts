@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import coil.load
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
-import ru.surf.gallery.dialog.FeaturedConfirmationDialog
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 
 class ProfileFragment : Fragment() {
@@ -25,12 +24,23 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val view = binding.root
+        getViewModelFactory()
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setLogoutButtonClickListener()
+        observeUser()
+    }
+
+    private fun getViewModelFactory() {
         val application = requireNotNull(this.activity).application
         val userDao = PostDatabase.getInstance(application).userDao
         profileViewModelFactory = ProfileViewModelFactory(userDao)
+    }
 
+    private fun setLogoutButtonClickListener() {
         binding.logoutBtn.setOnClickListener {
             ProfileConfirmationDialog {
                 //
@@ -39,8 +49,9 @@ class ProfileFragment : Fragment() {
                 ProfileConfirmationDialog.TAG
             )
         }
+    }
 
-
+    private fun observeUser() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
                 val user = it[0]
@@ -52,8 +63,6 @@ class ProfileFragment : Fragment() {
                 binding.email.text = user.email
             }
         }
-
-        return view
     }
 
     override fun onDestroyView() {

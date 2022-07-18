@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.material.snackbar.Snackbar
+import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
@@ -32,22 +35,36 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setLogoutButtonClickListener()
         observeUser()
+        observerUserToken()
+        observeLogoutStatus()
     }
 
     private fun getViewModelFactory() {
         val application = requireNotNull(this.activity).application
-        val userDao = PostDatabase.getInstance(application).userDao
-        profileViewModelFactory = ProfileViewModelFactory(userDao)
+        val database = PostDatabase.getInstance(application)
+        val userTokenDao = database.userTokenDao
+        val userDao = database.userDao
+        val postDao = database.postDao
+        profileViewModelFactory = ProfileViewModelFactory(userTokenDao, userDao, postDao)
     }
 
     private fun setLogoutButtonClickListener() {
         binding.logoutBtn.setOnClickListener {
             ProfileConfirmationDialog {
-                //
+                viewModel.logOutUser()
             }.show(
                 childFragmentManager,
                 ProfileConfirmationDialog.TAG
             )
+        }
+    }
+
+    private fun observerUserToken() {
+        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
+            userToken?.let {
+                val userToken = it[0]
+                viewModel.setUserToken(userToken)
+            }
         }
     }
 
@@ -61,6 +78,33 @@ class ProfileFragment : Fragment() {
                 binding.phone.text = user.phone
                 binding.city.text = user.city
                 binding.email.text = user.email
+            }
+        }
+    }
+
+    private fun observeLogoutStatus() {
+        viewModel.logoutStatus.observe(viewLifecycleOwner) { logoutStatus ->
+            logoutStatus?.let {
+                when (logoutStatus) {
+                    LogoutStatus.IN_PROGRESS -> {
+                        binding.logoutBtn.isLoading = true
+                    }
+                    LogoutStatus.LOGGED_OUT -> {
+                        binding.logoutBtn.isLoading = false
+                        findNavController().navigate(R.id.action_fragmentProfile_to_loginFragment)
+                    }
+                    LogoutStatus.ERROR -> {
+                        binding.logoutBtn.isLoading = false
+                        Snackbar.make(
+                            binding.root,
+                            R.string.can_not_logout_error,
+                            Snackbar.LENGTH_LONG
+                        ).setAnchorView(binding.logoutBtn).show()
+                    }
+                    LogoutStatus.NOT_LOGGED_OUT -> {
+                        // Do nothing
+                    }
+                }
             }
         }
     }

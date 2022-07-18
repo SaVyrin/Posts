@@ -18,6 +18,7 @@
     <string name="wrong_phone_number_format_error">Не верный формат номера телефона</string>
     <string name="wrong_password_format_error">Пароль должен быть от 6 до 255 символов</string>
     <string name="wrong_login_or_password_error">Логин или пароль введен неправильно</string>
+    <string name="can_not_logout_error">Не удалось выйти, попробуйте еще раз</string>
 
     <string name="main_screen_reload_error">Отсутствует интернет-соединение  Попробуйте позже</string>
     <string name="main_screen_load_error">Не удалось загрузить ленту \n Обновите экран или попробуйте позже</string>

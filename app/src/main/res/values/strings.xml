@@ -6,10 +6,15 @@
     <string name="password">Пароль</string>
 
     <string name="btn_login">Войти</string>
+    <string name="btn_load">Обновить</string>
     <string name="login_title">Вход</string>
+    <string name="main_title">Галерея</string>
 
     <string name="empty_field_error">Поле не может быть пустым</string>
     <string name="wrong_phone_number_format_error">Не верный формат номера телефона</string>
     <string name="wrong_password_format_error">Пароль должен быть от 6 до 255 символов</string>
     <string name="wrong_login_or_password_error">Логин или пароль введен неправильно</string>
+
+    <string name="main_screen_reload_error">Отсутствует интернет-соединение  Попробуйте позже</string>
+    <string name="main_screen_load_error">Не удалось загрузить ленту \n Обновите экран или попробуйте позже</string>
 </resources>

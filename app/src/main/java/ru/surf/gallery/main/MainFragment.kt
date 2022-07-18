@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
@@ -26,21 +29,17 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainListBinding.inflate(inflater, container, false)
-        val view = binding.root
-
         getViewModelFactory()
+        // TODO добавить SwipeRefreshLayout
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setSearchClickListener()
         setRecyclerViewAdapter()
-
-        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
-            userToken?.let {
-                val userToken = userToken[0]
-                lifecycleScope.launch {
-                    viewModel.getPosts(userToken.token)
-                }
-            }
-        }
-
-        return view
+        observeUserToken()
+        observePostsRequestStatus()
     }
 
     private fun getViewModelFactory() {
@@ -52,17 +51,77 @@ class MainFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter() {
-        val mainAdapter = MainPostRecyclerViewAdapter { post ->
-            lifecycleScope.launch {
-                viewModel.featuredIconClicked(post)
+        val mainAdapter = MainPostRecyclerViewAdapter(
+            featuredClickListener = { post ->
+                lifecycleScope.launch {
+                    viewModel.featuredIconClicked(post)
+                }
+            },
+            navigateClickListener = { post ->
+                val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
+                findNavController().navigate(action)
             }
-            /*
-                print("sdfsd")
-                findNavController().navigate(R.id.action_mainFragment_to_postFragment)*/
-        }
-
+        )
         binding.list.adapter = mainAdapter
+        observePosts(mainAdapter)
+    }
 
+    private fun setSearchClickListener() {
+        binding.imageView.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+        }
+    }
+
+    private fun observeUserToken() {
+        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
+            userToken?.let {
+                val userToken = userToken[0]
+                lifecycleScope.launch {
+                    viewModel.getPosts(userToken.token)
+                }
+            }
+        }
+    }
+
+    private fun observePostsRequestStatus() {
+        viewModel.postsRequestStatus.observe(viewLifecycleOwner) { postsRequest ->
+            postsRequest?.let {
+                when (postsRequest) {
+                    PostsRequestStatus.IN_PROGRESS -> {
+                        binding.list.isVisible = false
+                        binding.imageView.isVisible = false
+                        binding.navHostFragment.isVisible = true
+                        Navigation.findNavController(binding.navHostFragment)
+                            .navigate(R.id.mainLoaderFragment)
+                    }
+                    PostsRequestStatus.SUCCESS -> {
+                        binding.list.isVisible = true
+                        binding.imageView.isVisible = true
+                        binding.navHostFragment.isVisible = false
+                    }
+                    PostsRequestStatus.ERROR_RELOAD -> {
+                        binding.list.isVisible = true
+                        binding.imageView.isVisible = true
+                        binding.navHostFragment.isVisible = false
+                        Snackbar.make(
+                            binding.root,
+                            R.string.main_screen_reload_error,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    PostsRequestStatus.ERROR_LOAD -> {
+                        binding.list.isVisible = false
+                        binding.imageView.isVisible = false
+                        binding.navHostFragment.isVisible = true
+                        Navigation.findNavController(binding.navHostFragment)
+                            .navigate(R.id.mainErrorLoadFragment)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observePosts(mainAdapter: MainPostRecyclerViewAdapter) {
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             posts?.let {
                 mainAdapter.submitList(posts)

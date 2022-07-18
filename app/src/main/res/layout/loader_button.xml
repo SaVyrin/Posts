@@ -25,7 +25,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/progress_bar_color"
+            android:indeterminateTint="@color/button_progress_bar_color"
             android:visibility="visible" />
 
     </FrameLayout>

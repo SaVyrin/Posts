@@ -25,4 +25,5 @@
     <string name="dialog_positive_button_text">да, точно</string>
     <string name="dialog_negative_button_text">нет</string>
     <string name="dialog_delete_from_featured_text">Вы точно хотите удалить из избранного?\n</string>
+    <string name="dialog_logout_text">Вы точно хотите выйти из приложения?\n</string>
 </resources>

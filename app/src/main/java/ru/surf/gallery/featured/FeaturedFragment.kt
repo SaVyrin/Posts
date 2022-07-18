@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentFeaturedListBinding
-import ru.surf.gallery.dialog.ConfirmationDialogFragment
+import ru.surf.gallery.dialog.FeaturedConfirmationDialog
 
 class FeaturedFragment : Fragment() {
 
@@ -43,11 +41,12 @@ class FeaturedFragment : Fragment() {
 
     private fun setRecyclerViewAdapter() {
         val featuredAdapter = FeaturedPostRecyclerViewAdapter(
-            featuredClickListener = {
-                ConfirmationDialogFragment(
-                ).show(
+            featuredClickListener = { post ->
+                FeaturedConfirmationDialog {
+                    viewModel.removePostFromFeatured(post)
+                }.show(
                     childFragmentManager,
-                    ConfirmationDialogFragment.TAG
+                    FeaturedConfirmationDialog.TAG
                 )
             },
             navigateClickListener = {

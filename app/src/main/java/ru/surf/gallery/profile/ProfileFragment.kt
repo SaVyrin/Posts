@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import coil.load
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
+import ru.surf.gallery.dialog.FeaturedConfirmationDialog
+import ru.surf.gallery.dialog.ProfileConfirmationDialog
 
 class ProfileFragment : Fragment() {
 
@@ -28,6 +30,15 @@ class ProfileFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val userDao = PostDatabase.getInstance(application).userDao
         profileViewModelFactory = ProfileViewModelFactory(userDao)
+
+        binding.logoutBtn.setOnClickListener {
+            ProfileConfirmationDialog {
+                //
+            }.show(
+                childFragmentManager,
+                ProfileConfirmationDialog.TAG
+            )
+        }
 
 
         viewModel.user.observe(viewLifecycleOwner) { user ->

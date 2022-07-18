@@ -5,10 +5,11 @@
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
 
-    <string name="btn_login">Войти</string>
-    <string name="btn_load">Обновить</string>
     <string name="login_title">Вход</string>
     <string name="main_title">Галерея</string>
+    <string name="featured_title">Мои избранные</string>
+    <string name="btn_login">Войти</string>
+    <string name="btn_load">Обновить</string>
 
     <string name="empty_field_error">Поле не может быть пустым</string>
     <string name="wrong_phone_number_format_error">Не верный формат номера телефона</string>

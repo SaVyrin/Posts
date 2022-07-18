@@ -8,7 +8,10 @@
     <string name="login_title">Вход</string>
     <string name="main_title">Галерея</string>
     <string name="featured_title">Мои избранные</string>
+    <string name="profile_title">Профиль</string>
+
     <string name="btn_login">Войти</string>
+    <string name="btn_logout">Выйти</string>
     <string name="btn_load">Обновить</string>
 
     <string name="empty_field_error">Поле не может быть пустым</string>

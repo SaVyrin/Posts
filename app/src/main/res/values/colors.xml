@@ -20,5 +20,6 @@
 
     <color name="black">#FF000000</color>
 
+    <color name="almost_transparent_black">#0B000000</color>
     <color name="transparent">#00000000</color>
 </resources>

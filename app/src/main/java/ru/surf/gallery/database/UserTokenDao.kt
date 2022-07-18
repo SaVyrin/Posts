@@ -21,5 +21,8 @@ interface UserTokenDao {
     @Query("SELECT * FROM token_table")
     fun getAll(): LiveData<List<UserToken>>
 
+    @Query("DELETE FROM token_table")
+    fun deleteAll()
+
     // TODO сделать получение только 1 токена
 }

@@ -28,4 +28,7 @@
     <color name="bottom_nav_icon_color_unchecked">@color/gray_500</color>
     <color name="bottom_nav_icon_color_checked">@color/black</color>
 
+    <color name="profile_sub_text_color">@color/gray_600</color>
+    <color name="profile_main_text_color">@color/black</color>
+
 </resources>

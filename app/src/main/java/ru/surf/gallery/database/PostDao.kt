@@ -24,5 +24,8 @@ interface PostDao {
     @Query("SELECT * FROM post_table WHERE post_in_featured > 0")
     fun getFeaturedPosts(): LiveData<List<Post>>
 
+    @Query("DELETE FROM post_table")
+    fun deleteAll()
+
     // TODO сделать получение только 1 поста
 }

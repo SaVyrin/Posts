@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
@@ -34,6 +37,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerViewAdapter()
         observeUserToken()
+        observePostsRequestStatus()
     }
 
     private fun getViewModelFactory() {
@@ -53,7 +57,7 @@ class MainFragment : Fragment() {
             },
             navigateClickListener = { post ->
                 val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
-                this.findNavController().navigate(action)
+                findNavController().navigate(action)
             }
         )
         binding.list.adapter = mainAdapter
@@ -66,6 +70,40 @@ class MainFragment : Fragment() {
                 val userToken = userToken[0]
                 lifecycleScope.launch {
                     viewModel.getPosts(userToken.token)
+                }
+            }
+        }
+    }
+
+    private fun observePostsRequestStatus() {
+        viewModel.postsRequestStatus.observe(viewLifecycleOwner) { postsRequest ->
+            postsRequest?.let {
+                when (postsRequest) {
+                    PostsRequestStatus.IN_PROGRESS -> {
+                        binding.list.isVisible = false
+                        binding.navHostFragment.isVisible = true
+                        Navigation.findNavController(binding.navHostFragment)
+                            .navigate(R.id.action_global_mainLoaderFragment)
+                    }
+                    PostsRequestStatus.SUCCESS -> {
+                        binding.list.isVisible = true
+                        binding.navHostFragment.isVisible = false
+                    }
+                    PostsRequestStatus.ERROR_RELOAD -> {
+                        binding.list.isVisible = true
+                        binding.navHostFragment.isVisible = false
+                        Snackbar.make(
+                            binding.root,
+                            R.string.main_screen_reload_error,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    PostsRequestStatus.ERROR_LOAD -> {
+                        binding.list.isVisible = false
+                        binding.navHostFragment.isVisible = true
+                        Navigation.findNavController(binding.navHostFragment)
+                            .navigate(R.id.action_global_mainErrorLoadFragment)
+                    }
                 }
             }
         }

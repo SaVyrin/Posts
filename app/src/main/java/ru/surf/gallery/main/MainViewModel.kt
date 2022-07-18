@@ -1,12 +1,12 @@
 package ru.surf.gallery.main
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.surf.gallery.database.*
-import ru.surf.gallery.login.LoginViewModel
 import ru.surf.gallery.rest.PostApi
 import ru.surf.gallery.rest.PostResponse
 
@@ -18,17 +18,27 @@ class MainViewModel(
     val userToken = userTokenDao.getAll()
     val posts = postDao.getAll()
 
+    private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
+    val postsRequestStatus: LiveData<PostsRequestStatus> = mutablePostsRequestStatus
+
     suspend fun getPosts(userToken: String) {
         viewModelScope.launch {
-            val postApi = PostApi.create()
-            val postsReq =
-                async {
-                    postApi.getPosts("Token $userToken")
-                }.await()
-
-            addPostsToDb(postsReq)
-            Log.e("Request", "$postsReq")
+            try {
+                mutablePostsRequestStatus.value = PostsRequestStatus.IN_PROGRESS
+                val postsResponse = sendPostsRequest(userToken)
+                addPostsToDb(postsResponse)
+                Log.e("Request", "$postsResponse")
+                mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
+                // TODO добавить обработку ошибок
+            } catch (error: Throwable) {
+                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
+            }
         }
+    }
+
+    private suspend fun sendPostsRequest(userToken: String): List<PostResponse> {
+        val postApi = PostApi.create()
+        return postApi.getPosts("Token $userToken")
     }
 
     private suspend fun addPostsToDb(postsReq: List<PostResponse>) {

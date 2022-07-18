@@ -39,6 +39,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="12dp"
         android:text="Первый день в Surf"
+        android:textColor="@color/main_screen_post_title"
         android:textAppearance="@style/Text.Medium.12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,6 +11,7 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
+import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 
@@ -62,8 +63,10 @@ class ProfileFragment : Fragment() {
     private fun observerUserToken() {
         viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
-                val userToken = it[0]
-                viewModel.setUserToken(userToken)
+                if (userToken.isNotEmpty()) {
+                    val userToken = it[0]
+                    viewModel.setUserToken(userToken)
+                }
             }
         }
     }
@@ -71,13 +74,15 @@ class ProfileFragment : Fragment() {
     private fun observeUser() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
-                val user = it[0]
-                binding.avatar.load(user.avatar)
-                binding.name.text = "${user.firstName} ${user.lastName}"
-                binding.about.text = user.about
-                binding.phone.text = user.phone
-                binding.city.text = user.city
-                binding.email.text = user.email
+                if (user.isNotEmpty()) {
+                    val user = it[0]
+                    binding.avatar.load(user.avatar)
+                    binding.name.text = "${user.firstName} ${user.lastName}"
+                    binding.about.text = user.about
+                    binding.phone.text = user.phone
+                    binding.city.text = user.city
+                    binding.email.text = user.email
+                }
             }
         }
     }

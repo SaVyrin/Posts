@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.gallery.database.PostDao
 import ru.surf.gallery.database.UserDao
 import ru.surf.gallery.database.UserToken
@@ -36,11 +37,7 @@ class ProfileViewModel(
                 val postApi = PostApi.create()
                 val logoutResponse = postApi.logout("Token $token")
                 when (logoutResponse.code()) {
-                    204 -> {
-                        clearUserData()
-                        mutableLogoutStatus.value = LogoutStatus.LOGGED_OUT
-                    }
-                    401 -> {
+                    204, 401 -> {
                         clearUserData()
                         mutableLogoutStatus.value = LogoutStatus.LOGGED_OUT
                     }
@@ -52,8 +49,8 @@ class ProfileViewModel(
         }
     }
 
-    private fun clearUserData() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun clearUserData() {
+        withContext(Dispatchers.IO) {
             removeUserTokenFromDb()
             removeUserInfoFromDb()
             removePostsFromDb()

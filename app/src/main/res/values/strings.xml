@@ -28,4 +28,8 @@
     <string name="dialog_negative_button_text">нет</string>
     <string name="dialog_delete_from_featured_text">Вы точно хотите удалить из избранного?\n</string>
     <string name="dialog_logout_text">Вы точно хотите выйти из приложения?\n</string>
+
+    <string name="search_screen_default_text">Введите ваш запрос</string>
+    <string name="search_screen_no_result_text">По этому запросу нет результатов, попробуйте другой запрос</string>
+
 </resources>

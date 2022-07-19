@@ -34,4 +34,7 @@
     <color name="post_sub_text_color">@color/gray_600</color>
     <color name="post_main_text_color">@color/black</color>
 
+    <color name="search_view_background_color">@color/white_200</color>
+    <color name="search_screen_text_color">@color/gray_500</color>
+
 </resources>

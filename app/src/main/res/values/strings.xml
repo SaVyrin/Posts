@@ -7,6 +7,7 @@
 
     <string name="login_title">Вход</string>
     <string name="main_title">Галерея</string>
+    <string name="post_title">Галерея</string>
     <string name="featured_title">Мои избранные</string>
     <string name="profile_title">Профиль</string>
 

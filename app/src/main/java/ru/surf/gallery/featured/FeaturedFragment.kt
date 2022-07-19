@@ -11,6 +11,7 @@ import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentFeaturedListBinding
 import ru.surf.gallery.dialog.FeaturedConfirmationDialog
+import ru.surf.gallery.main.MainFragmentDirections
 
 class FeaturedFragment : Fragment() {
 
@@ -49,8 +50,10 @@ class FeaturedFragment : Fragment() {
                     FeaturedConfirmationDialog.TAG
                 )
             },
-            navigateClickListener = {
-                findNavController().navigate(R.id.action_featuredFragment_to_postFragment)
+            navigateClickListener = { post ->
+                val action = FeaturedFragmentDirections
+                    .actionFeaturedFragmentToPostFragment(post.id)
+                findNavController().navigate(action)
             }
         )
 

@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
     tools:context=".post.PostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,22 +11,51 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
+            android:id="@+id/back_arrow_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_launcher_foreground"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/ic_back_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
+            android:id="@id/title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/post_title"
+            android:textAppearance="@style/Text.SemiBold.24"
+            android:textColor="@color/post_main_text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="326dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="TODO"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:text="Чашечка свежего кофе"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textAppearance="@style/Text.Medium.16"
+            android:textColor="@color/post_main_text_color"
+            app:layout_constraintEnd_toStartOf="@+id/date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image" />
 
@@ -36,23 +63,28 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="16dp"
             android:text="12.05.2022"
-            android:textColor="@color/gray_500"
-            android:textSize="10sp"
+            android:textAppearance="@style/Text.Medium.10"
+            android:textColor="@color/post_sub_text_color"
             app:layout_constraintBottom_toBottomOf="@+id/name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/image" />
 
         <TextView
             android:id="@+id/content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
+            android:layout_marginEnd="16dp"
             android:text="Для бариста и посетителей кофеен специальные кружки для кофе — это ещё один способ проконтролировать вкус напитка и приготовить его именно так, как нравится вам.
 
 Теперь, кроме регулировки экстракции, настройки помола, времени заваривания и многого что помогает выделять нужные характеристики кофе, вы сможете выбрать и кружку для кофе в зависимости от сорта."
-            android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textAppearance="@style/Text.Regular.12"
+            android:textColor="@color/post_main_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name" />
     </androidx.constraintlayout.widget.ConstraintLayout>

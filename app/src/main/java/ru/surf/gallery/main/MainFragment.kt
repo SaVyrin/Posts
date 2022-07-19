@@ -88,7 +88,7 @@ class MainFragment : Fragment() {
             postsRequest?.let {
                 when (postsRequest) {
                     PostsRequestStatus.IN_PROGRESS -> {
-                        binding.list.isVisible = false
+                        binding.list.isVisible = false // TODO перенести список в отдельный фрагмент
                         binding.imageView.isVisible = false
                         binding.navHostFragment.isVisible = true
                         Navigation.findNavController(binding.navHostFragment)

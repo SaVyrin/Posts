@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import coil.load
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentPostBinding
@@ -32,6 +33,7 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observePost()
+        setBackArrowClickListener()
     }
 
     private fun getPostIdFromArguments(): String {
@@ -52,6 +54,12 @@ class PostFragment : Fragment() {
                 binding.date.text = post.publicationDate.toString()
                 binding.image.load(post.photoUrl)
             }
+        }
+    }
+
+    private fun setBackArrowClickListener() {
+        binding.backArrowImage.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

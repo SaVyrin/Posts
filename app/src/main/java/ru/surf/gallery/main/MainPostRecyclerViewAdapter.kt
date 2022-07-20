@@ -42,7 +42,7 @@ class MainPostRecyclerViewAdapter(
         ) {
             binding.tvPostName.text = item.title
             binding.postImage.load(item.photoUrl)
-            when (item.inFeatured) { // TODO При нажатии на сердечко в первый раз не изменяется картинка
+            when (item.inFeatured) {
                 true -> binding.featuredImage.load(R.drawable.ic_heart_fill)
                 false -> binding.featuredImage.load(R.drawable.ic_heart_line)
             }

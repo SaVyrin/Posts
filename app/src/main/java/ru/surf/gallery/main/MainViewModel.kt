@@ -10,7 +10,6 @@ import retrofit2.Response
 import ru.surf.gallery.database.*
 import ru.surf.gallery.rest.PostApi
 import ru.surf.gallery.rest.PostResponse
-import java.lang.Exception
 
 class MainViewModel(
     private val userTokenDao: UserTokenDao,
@@ -20,10 +19,11 @@ class MainViewModel(
 
     val userTokenFromDao: LiveData<List<UserToken>> = userTokenDao.getAll()
     private var userToken = ""
-    val posts = postDao.getAll()
 
     private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
     val postsRequestStatus: LiveData<PostsRequestStatus> = mutablePostsRequestStatus
+
+    val posts = postDao.getAll()
 
     fun setUserToken(tokenFromDao: UserToken) {
         userToken = tokenFromDao.token
@@ -34,7 +34,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
-                getPostsFromRest()
+                getPostsFromServer()
             } catch (error: Throwable) {
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
             }
@@ -45,14 +45,14 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
-                getPostsFromRest()
+                getPostsFromServer()
             } catch (error: Throwable) {
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
             }
         }
     }
 
-    private suspend fun getPostsFromRest() {
+    private suspend fun getPostsFromServer() {
         val postsResponse = sendPostsRequest(userToken)
         when {
             postsResponse.code() == 401 -> {

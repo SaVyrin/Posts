@@ -104,13 +104,15 @@ class MainViewModel(
     }
 
     private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {
+        val currentTime = System.currentTimeMillis()
         return Post(
             post.id,
             post.title,
             post.content,
             post.photoUrl,
             post.publicationDate,
-            inFeatured
+            inFeatured,
+            currentTime
         )
     }
 

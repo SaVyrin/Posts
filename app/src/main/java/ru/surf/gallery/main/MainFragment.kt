@@ -8,27 +8,26 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
-import ru.surf.gallery.databinding.FragmentMainListBinding
+import ru.surf.gallery.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
     private lateinit var mainViewModelFactory: MainViewModelFactory
     private val viewModel: MainViewModel by viewModels { mainViewModelFactory }
 
-    private var _binding: FragmentMainListBinding? = null
+    private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMainListBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         getViewModelFactory()
         // TODO добавить SwipeRefreshLayout
         return binding.root
@@ -62,7 +61,7 @@ class MainFragment : Fragment() {
                 findNavController().navigate(action)
             }
         )
-        binding.list.adapter = mainAdapter
+        binding.mainList.list.adapter = mainAdapter
         observePosts(mainAdapter)
     }
 
@@ -88,21 +87,22 @@ class MainFragment : Fragment() {
             postsRequest?.let {
                 when (postsRequest) {
                     PostsRequestStatus.IN_PROGRESS -> {
-                        binding.list.isVisible = false // TODO перенести список в отдельный фрагмент
+                        binding.mainList.root.isVisible = false
                         binding.imageView.isVisible = false
-                        binding.navHostFragment.isVisible = true
-                        Navigation.findNavController(binding.navHostFragment)
-                            .navigate(R.id.mainLoaderFragment)
+                        binding.mainLoader.root.isVisible = true
+                        binding.mainErrorLoad.root.isVisible = false
                     }
                     PostsRequestStatus.SUCCESS -> {
-                        binding.list.isVisible = true
+                        binding.mainList.root.isVisible = true
                         binding.imageView.isVisible = true
-                        binding.navHostFragment.isVisible = false
+                        binding.mainLoader.root.isVisible = false
+                        binding.mainErrorLoad.root.isVisible = false
                     }
                     PostsRequestStatus.ERROR_RELOAD -> {
-                        binding.list.isVisible = true
+                        binding.mainList.root.isVisible = true
                         binding.imageView.isVisible = true
-                        binding.navHostFragment.isVisible = false
+                        binding.mainLoader.root.isVisible = false
+                        binding.mainErrorLoad.root.isVisible = false
                         Snackbar.make(
                             binding.root,
                             R.string.main_screen_reload_error,
@@ -110,11 +110,10 @@ class MainFragment : Fragment() {
                         ).show()
                     }
                     PostsRequestStatus.ERROR_LOAD -> {
-                        binding.list.isVisible = false
+                        binding.mainList.root.isVisible = false
                         binding.imageView.isVisible = false
-                        binding.navHostFragment.isVisible = true
-                        Navigation.findNavController(binding.navHostFragment)
-                            .navigate(R.id.mainErrorLoadFragment)
+                        binding.mainLoader.root.isVisible = false
+                        binding.mainErrorLoad.root.isVisible = true
                     }
                 }
             }

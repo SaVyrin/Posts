@@ -20,7 +20,7 @@
         android:id="@+id/mainFragment"
         android:name="ru.surf.gallery.main.MainFragment"
         android:label="fragment_main_list"
-        tools:layout="@layout/fragment_main_list">
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_postFragment"
             app:destination="@id/postFragment" />

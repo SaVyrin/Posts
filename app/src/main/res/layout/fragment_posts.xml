@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search.inner_fragments.PostsFragment"
     tools:showIn="@layout/fragment_search">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="2"
-        tools:listitem="@layout/fragment_main" />
+        tools:listitem="@layout/fragment_main_list_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

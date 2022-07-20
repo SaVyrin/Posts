@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.inner_fragments.MainErrorLoadFragment">
+    tools:showIn="@layout/fragment_main">
 
     <ImageView
         android:id="@+id/error_load_image"

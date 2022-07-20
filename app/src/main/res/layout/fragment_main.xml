@@ -3,46 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    tools:context=".main.MainFragment">
 
-    <ImageView
-        android:id="@+id/post_image"
-        android:layout_width="0dp"
-        android:layout_height="222dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/main_title"
+        android:textAppearance="@style/Text.SemiBold.24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/featured_image"
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="9dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/ic_heart_line"
-        app:layout_constraintEnd_toEndOf="@+id/post_image"
-        app:layout_constraintTop_toTopOf="@+id/post_image" />
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        android:src="@drawable/ic_search"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/tv_post_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="12dp"
-        android:text="Первый день в Surf"
-        android:textColor="@color/main_screen_post_title"
-        android:textAppearance="@style/Text.Medium.12"
+    <include
+        android:id="@+id/main_list"
+        layout="@layout/fragment_main_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="23dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_image" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <include
+        android:id="@+id/main_loader"
+        layout="@layout/fragment_main_loader"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="23dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <include
+        android:id="@+id/main_error_load"
+        layout="@layout/fragment_main_error_load"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="23dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

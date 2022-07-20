@@ -52,10 +52,21 @@ class SearchViewModel(
         }
     }
 
-    fun removeFromFeatured(post: Post) {
+    fun featuredIconClicked(post: Post) {
         viewModelScope.launch {
-            postDao.update(createUpdatedPost(false, post))
+            when (post.inFeatured) {
+                true -> removeFromFeatured(post)
+                false -> addToFeatured(post)
+            }
         }
+    }
+
+    private suspend fun addToFeatured(post: Post) {
+        postDao.update(createUpdatedPost(true, post))
+    }
+
+    private suspend fun removeFromFeatured(post: Post) {
+        postDao.update(createUpdatedPost(false, post))
     }
 
     private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {

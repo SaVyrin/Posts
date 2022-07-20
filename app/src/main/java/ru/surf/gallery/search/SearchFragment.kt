@@ -76,7 +76,7 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         val mainAdapter = MainPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                removePostFromFeatured(post)
+                featuredIconClicked(post)
             },
             navigateClickListener = { post ->
                 navigateToPost(post)
@@ -86,8 +86,8 @@ class SearchFragment : Fragment() {
         observePostsToShow(mainAdapter)
     }
 
-    private fun removePostFromFeatured(post: Post) {
-        viewModel.removeFromFeatured(post)
+    private fun featuredIconClicked(post: Post) {
+        viewModel.featuredIconClicked(post)
     }
 
     private fun navigateToPost(post: Post) {

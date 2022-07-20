@@ -22,7 +22,7 @@ interface UserTokenDao {
     fun getAll(): LiveData<List<UserToken>>
 
     @Query("DELETE FROM token_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     // TODO сделать получение только 1 токена
 }

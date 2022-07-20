@@ -1,60 +1,127 @@
 package ru.surf.gallery.search
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.surf.gallery.R
+import android.widget.SearchView
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
+import ru.surf.gallery.database.PostDatabase
+import ru.surf.gallery.databinding.FragmentSearchBinding
+import ru.surf.gallery.main.MainPostRecyclerViewAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var searchViewModelFactory: SearchViewModelFactory
+    private val viewModel: SearchViewModel by viewModels { searchViewModelFactory }
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        getViewModelFactory()
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setBackArrowClickListener()
+        setSearchViewTextListener()
+        setRecyclerViewAdapter()
+        observePostsFromDao()
+        observeSearchStatus()
+    }
+
+    private fun getViewModelFactory() {
+        val application = requireNotNull(this.activity).application
+        val postDao = PostDatabase.getInstance(application).postDao
+        searchViewModelFactory = SearchViewModelFactory(postDao)
+    }
+
+    private fun setBackArrowClickListener() {
+        binding.backArrowImage.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun setSearchViewTextListener() {
+        binding.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.findMatchingPosts(newText)
+                    return false
+                }
+
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    // task HERE
+                    return false
+                }
+
+            })
+    }
+
+    private fun setRecyclerViewAdapter() {
+        val mainAdapter = MainPostRecyclerViewAdapter(
+            featuredClickListener = { post ->
+                lifecycleScope.launch {
+                    viewModel.featuredIconClicked(post)
+                }
+            },
+            navigateClickListener = { post ->
+                val action = SearchFragmentDirections.actionSearchFragmentToPostFragment(post.id)
+                findNavController().navigate(action)
+            }
+        )
+        binding.showResults.list.adapter = mainAdapter
+        observePostsToShow(mainAdapter)
+    }
+
+    private fun observePostsToShow(mainAdapter: MainPostRecyclerViewAdapter) {
+        viewModel.postsToShow.observe(viewLifecycleOwner) { posts ->
+            posts?.let {
+                mainAdapter.submitList(posts)
+            }
+        }
+    }
+
+    private fun observePostsFromDao() {
+        viewModel.postsFromDao.observe(viewLifecycleOwner) { posts ->
+            posts?.let {
+                viewModel.setPostsToMatch(posts)
+            }
+        }
+    }
+
+    private fun observeSearchStatus() {
+        viewModel.searchStatus.observe(viewLifecycleOwner) { searchStatus ->
+            searchStatus?.let {
+                when (searchStatus) {
+                    SearchStatus.NOT_SEARCHING -> {
+                        binding.notSearching.root.isVisible = true
+                        binding.showResults.root.isVisible = false
+                        binding.noResults.root.isVisible = false
+                    }
+                    SearchStatus.NO_RESULTS -> {
+                        binding.notSearching.root.isVisible = false
+                        binding.noResults.root.isVisible = true
+                        binding.showResults.root.isVisible = false
+                    }
+                    SearchStatus.SHOW_RESULTS -> {
+                        binding.notSearching.root.isVisible = false
+                        binding.noResults.root.isVisible = false
+                        binding.showResults.root.isVisible = true
+                    }
                 }
             }
+        }
     }
 }

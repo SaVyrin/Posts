@@ -50,22 +50,20 @@ class ProfileViewModel(
     }
 
     private suspend fun clearUserData() {
-        withContext(Dispatchers.IO) {
-            removeUserTokenFromDb()
-            removeUserInfoFromDb()
-            removePostsFromDb()
-        }
+        removeUserTokenFromDb()
+        removeUserInfoFromDb()
+        removePostsFromDb()
     }
 
-    private fun removeUserTokenFromDb() {
+    private suspend fun removeUserTokenFromDb() {
         userTokenDao.deleteAll()
     }
 
-    private fun removeUserInfoFromDb() {
+    private suspend fun removeUserInfoFromDb() {
         userDao.deleteAll()
     }
 
-    private fun removePostsFromDb() {
+    private suspend fun removePostsFromDb() {
         postDao.deleteAll()
     }
 }

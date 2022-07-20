@@ -41,7 +41,7 @@ class ProfileViewModel(
                         clearUserData()
                         mutableLogoutStatus.value = LogoutStatus.LOGGED_OUT
                     }
-                    else -> Throwable()
+                    else -> mutableLogoutStatus.value = LogoutStatus.ERROR
                 }
             } catch (error: Throwable) {
                 mutableLogoutStatus.value = LogoutStatus.ERROR

@@ -45,8 +45,9 @@ class MainFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val database = PostDatabase.getInstance(application)
         val userTokenDao = database.userTokenDao
+        val userDao = database.userDao
         val postDao = database.postDao
-        mainViewModelFactory = MainViewModelFactory(userTokenDao, postDao)
+        mainViewModelFactory = MainViewModelFactory(userTokenDao, userDao, postDao)
     }
 
     private fun setSearchClickListener() {
@@ -87,8 +88,10 @@ class MainFragment : Fragment() {
     private fun observeUserToken() {
         viewModel.userTokenFromDao.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
-                val userToken = userToken[0]
-                viewModel.setUserToken(userToken)
+                if (userToken.isNotEmpty()) {
+                    val userToken = userToken[0]
+                    viewModel.setUserToken(userToken)
+                }
             }
         }
     }
@@ -128,6 +131,9 @@ class MainFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).setAnchorView(requireActivity().findViewById(R.id.bottomNavigationView3))
                             .show()
+                    }
+                    PostsRequestStatus.UNAUTHORIZED -> {
+                        findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
                     }
                     PostsRequestStatus.REFRESHING -> {
                         // DO nothing

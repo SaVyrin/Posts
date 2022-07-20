@@ -6,15 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.surf.gallery.database.Post
-import ru.surf.gallery.database.PostDao
-import ru.surf.gallery.database.UserToken
-import ru.surf.gallery.database.UserTokenDao
+import retrofit2.Response
+import ru.surf.gallery.database.*
 import ru.surf.gallery.rest.PostApi
 import ru.surf.gallery.rest.PostResponse
+import java.lang.Exception
 
 class MainViewModel(
     private val userTokenDao: UserTokenDao,
+    private val userDao: UserDao,
     private val postDao: PostDao
 ) : ViewModel() {
 
@@ -54,25 +54,36 @@ class MainViewModel(
 
     private suspend fun getPostsFromRest() {
         val postsResponse = sendPostsRequest(userToken)
-        addPostsToDb(postsResponse)
-        Log.e("Request", "$postsResponse")
-        mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
-        // TODO добавить обработку ошибок
+        when {
+            postsResponse.code() == 401 -> {
+                clearUserData()
+                mutablePostsRequestStatus.value = PostsRequestStatus.UNAUTHORIZED
+            }
+            postsResponse.body().isNullOrEmpty() -> {
+                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
+            }
+            postsResponse.isSuccessful -> {
+                postsResponse.body()?.let {
+                    addPostsToDb(it)
+                    Log.e("Request", "$postsResponse")
+                    mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
+                    // TODO добавить обработку ошибок
+                }
+            }
+            else -> {
+                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
+            }
+        }
     }
 
-    private suspend fun sendPostsRequest(userToken: String): List<PostResponse> {
+    private suspend fun sendPostsRequest(userToken: String): Response<List<PostResponse>> {
         val postApi = PostApi.create()
         return postApi.getPosts("Token $userToken")
     }
 
     private suspend fun addPostsToDb(postsReq: List<PostResponse>) {
-        for (postResponse in postsReq) {
-            addPostToDb(postResponse.toPost())
-        }
-    }
-
-    private suspend fun addPostToDb(post: Post) {
-        postDao.insert(post)
+        val postsToInsert = postsReq.map { it.toPost() }
+        postDao.insertAll(postsToInsert) // TODO так не скачет список, когда первый раз заносишь в бд
     }
 
     fun featuredIconClicked(post: Post) {
@@ -101,5 +112,23 @@ class MainViewModel(
             post.publicationDate,
             inFeatured
         )
+    }
+
+    private suspend fun clearUserData() {
+        removeUserTokenFromDb()
+        removeUserInfoFromDb()
+        removePostsFromDb()
+    }
+
+    private suspend fun removeUserTokenFromDb() {
+        userTokenDao.deleteAll()
+    }
+
+    private suspend fun removeUserInfoFromDb() {
+        userDao.deleteAll()
+    }
+
+    private suspend fun removePostsFromDb() {
+        postDao.deleteAll()
     }
 }

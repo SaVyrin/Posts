@@ -22,7 +22,7 @@ interface PostApi {
     @GET("picture")
     suspend fun getPosts(
         @Header(AUTHORIZATION_HEADER) loginToken: String
-    ): List<PostResponse>
+    ): Response<List<PostResponse>>
 
 
     companion object {

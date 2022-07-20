@@ -9,6 +9,9 @@ interface PostDao {
     @Insert(onConflict = IGNORE) // TODO убрать onConflict
     suspend fun insert(post: Post)
 
+    @Insert(onConflict = IGNORE)
+    suspend fun insertAll(posts: List<Post>)
+
     @Update
     suspend fun update(post: Post)
 

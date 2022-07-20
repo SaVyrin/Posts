@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.surf.gallery.R
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentFeaturedListBinding
 import ru.surf.gallery.dialog.FeaturedConfirmationDialog
-import ru.surf.gallery.main.MainFragmentDirections
 
 class FeaturedFragment : Fragment() {
 
@@ -24,14 +23,15 @@ class FeaturedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFeaturedListBinding.inflate(inflater, container, false)
-        val view = binding.root
-
         getViewModelFactory()
-        setRecyclerViewAdapter()
+        return binding.root
+    }
 
-        return view
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setRecyclerViewAdapter()
     }
 
     private fun getViewModelFactory() {
@@ -43,22 +43,31 @@ class FeaturedFragment : Fragment() {
     private fun setRecyclerViewAdapter() {
         val featuredAdapter = FeaturedPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                FeaturedConfirmationDialog {
-                    viewModel.removePostFromFeatured(post)
-                }.show(
-                    childFragmentManager,
-                    FeaturedConfirmationDialog.TAG
-                )
+                showRemoveFromFeaturedDialog(post)
             },
             navigateClickListener = { post ->
-                val action = FeaturedFragmentDirections
-                    .actionFeaturedFragmentToPostFragment(post.id)
-                findNavController().navigate(action)
+                navigateToPost(post)
             }
         )
-
         binding.list.adapter = featuredAdapter
+        observeFeaturedPosts(featuredAdapter)
+    }
 
+    private fun showRemoveFromFeaturedDialog(post: Post) {
+        FeaturedConfirmationDialog {
+            viewModel.removePostFromFeatured(post)
+        }.show(
+            childFragmentManager,
+            FeaturedConfirmationDialog.TAG
+        )
+    }
+
+    private fun navigateToPost(post: Post) {
+        val action = FeaturedFragmentDirections.actionFeaturedFragmentToPostFragment(post.id)
+        findNavController().navigate(action)
+    }
+
+    private fun observeFeaturedPosts(featuredAdapter: FeaturedPostRecyclerViewAdapter) {
         viewModel.featuredPosts.observe(viewLifecycleOwner) { posts ->
             posts?.let {
                 featuredAdapter.submitList(posts)

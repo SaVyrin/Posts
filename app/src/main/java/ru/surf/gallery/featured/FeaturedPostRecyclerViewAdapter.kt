@@ -23,7 +23,7 @@ class FeaturedPostRecyclerViewAdapter(
         holder.bind(item, featuredClickListener, navigateClickListener)
     }
 
-    class PostItemViewHolder(val binding: FragmentFeaturedBinding) :
+    class PostItemViewHolder(private val binding: FragmentFeaturedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {

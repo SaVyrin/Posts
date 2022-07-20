@@ -51,7 +51,7 @@ class PostFragment : Fragment() {
             post?.let {
                 binding.name.text = post.title
                 binding.content.text = post.content
-                binding.date.text = post.publicationDate.toString()
+                binding.date.text = post.publicationDate
                 binding.image.load(post.photoUrl)
             }
         }

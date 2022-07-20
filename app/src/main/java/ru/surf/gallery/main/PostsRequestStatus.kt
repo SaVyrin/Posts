@@ -1,8 +1,10 @@
 package ru.surf.gallery.main
 
 enum class PostsRequestStatus {
-    IN_PROGRESS,
+    LOADING,
+    REFRESHING,
     SUCCESS,
+    UNAUTHORIZED,
     ERROR_LOAD,
-    ERROR_RELOAD
+    ERROR_REFRESH
 }

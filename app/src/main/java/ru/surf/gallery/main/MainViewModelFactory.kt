@@ -9,13 +9,14 @@ import ru.surf.gallery.database.UserTokenDao
 
 class MainViewModelFactory(
     private val userTokenDao: UserTokenDao,
+    private val userDao: UserDao,
     private val postDao: PostDao
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainFragment::class.java)) {
-            return MainViewModel(userTokenDao, postDao) as T
+            return MainViewModel(userTokenDao, userDao, postDao) as T
         }
-        return MainViewModel(userTokenDao, postDao) as T // TODO почему-то заходит сюда
+        return MainViewModel(userTokenDao, userDao, postDao) as T // TODO почему-то заходит сюда
     }
 }

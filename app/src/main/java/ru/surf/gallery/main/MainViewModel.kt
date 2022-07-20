@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.surf.gallery.database.*
+import ru.surf.gallery.database.Post
+import ru.surf.gallery.database.PostDao
+import ru.surf.gallery.database.UserToken
+import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.rest.PostApi
 import ru.surf.gallery.rest.PostResponse
 
@@ -15,13 +18,19 @@ class MainViewModel(
     private val postDao: PostDao
 ) : ViewModel() {
 
-    val userToken = userTokenDao.getAll()
+    val userTokenFromDao: LiveData<List<UserToken>> = userTokenDao.getAll()
+    private var userToken = ""
     val posts = postDao.getAll()
 
     private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
     val postsRequestStatus: LiveData<PostsRequestStatus> = mutablePostsRequestStatus
 
-    suspend fun getPosts(userToken: String) {
+    fun setUserToken(tokenFromDao: UserToken) {
+        userToken = tokenFromDao.token
+        getPosts()
+    }
+
+    fun getPosts() {
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.IN_PROGRESS
@@ -51,10 +60,12 @@ class MainViewModel(
         postDao.insert(post)
     }
 
-    suspend fun featuredIconClicked(post: Post) {
-        when (post.inFeatured) {
-            true -> removeFromFeatured(post)
-            false -> addToFeatured(post)
+    fun featuredIconClicked(post: Post) {
+        viewModelScope.launch {
+            when (post.inFeatured) {
+                true -> removeFromFeatured(post)
+                false -> addToFeatured(post)
+            }
         }
     }
 

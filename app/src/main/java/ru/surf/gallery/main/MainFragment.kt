@@ -37,6 +37,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setSearchClickListener()
         setRecyclerViewAdapter()
+        setErrorLoadButtonClickListener()
         observeUserToken()
         observePostsRequestStatus()
     }
@@ -49,12 +50,17 @@ class MainFragment : Fragment() {
         mainViewModelFactory = MainViewModelFactory(userTokenDao, postDao)
     }
 
+    private fun setSearchClickListener() {
+        binding.imageView.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+        }
+    }
+
     private fun setRecyclerViewAdapter() {
         val mainAdapter = MainPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                lifecycleScope.launch {
-                    viewModel.featuredIconClicked(post)
-                }
+                viewModel.featuredIconClicked(post)
+
             },
             navigateClickListener = { post ->
                 val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
@@ -65,19 +71,17 @@ class MainFragment : Fragment() {
         observePosts(mainAdapter)
     }
 
-    private fun setSearchClickListener() {
-        binding.imageView.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+    private fun setErrorLoadButtonClickListener() {
+        binding.mainErrorLoad.btnLoad.setOnClickListener {
+            viewModel.getPosts()
         }
     }
 
     private fun observeUserToken() {
-        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
+        viewModel.userTokenFromDao.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
                 val userToken = userToken[0]
-                lifecycleScope.launch {
-                    viewModel.getPosts(userToken.token)
-                }
+                viewModel.setUserToken(userToken)
             }
         }
     }

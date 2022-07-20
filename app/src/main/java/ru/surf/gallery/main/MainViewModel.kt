@@ -59,12 +59,21 @@ class MainViewModel(
     }
 
     private suspend fun addToFeatured(post: Post) {
-        post.inFeatured = true
-        postDao.update(post)
+        postDao.update(createUpdatedPost(true, post)) // TODO так сразу обновляется список
     }
 
     private suspend fun removeFromFeatured(post: Post) {
-        post.inFeatured = false
-        postDao.update(post)
+        postDao.update(createUpdatedPost(false, post))
+    }
+
+    private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {
+        return Post(
+            post.id,
+            post.title,
+            post.content,
+            post.photoUrl,
+            post.publicationDate,
+            inFeatured
+        )
     }
 }

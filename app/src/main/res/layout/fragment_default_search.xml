@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search.inner_fragments.DefaultSearchFragment">
+    tools:showIn="@layout/fragment_search">
 
     <ImageView
         android:id="@+id/imageView2"

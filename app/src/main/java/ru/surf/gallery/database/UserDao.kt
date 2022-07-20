@@ -22,7 +22,7 @@ interface UserDao {
     fun getAll(): LiveData<List<User>>
 
     @Query("DELETE FROM user_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     // TODO сделать получение только 1 юзера
 }

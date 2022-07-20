@@ -25,7 +25,7 @@ interface PostDao {
     fun getFeaturedPosts(): LiveData<List<Post>>
 
     @Query("DELETE FROM post_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     // TODO сделать получение только 1 поста
 }

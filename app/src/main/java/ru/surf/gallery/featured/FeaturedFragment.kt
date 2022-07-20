@@ -31,7 +31,7 @@ class FeaturedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRecyclerViewAdapter()
+        initRecyclerView()
     }
 
     private fun getViewModelFactory() {
@@ -40,7 +40,7 @@ class FeaturedFragment : Fragment() {
         featuredViewModelFactory = FeaturedViewModelFactory(postDao)
     }
 
-    private fun setRecyclerViewAdapter() {
+    private fun initRecyclerView() {
         val featuredAdapter = FeaturedPostRecyclerViewAdapter(
             featuredClickListener = { post ->
                 showRemoveFromFeaturedDialog(post)
@@ -49,7 +49,7 @@ class FeaturedFragment : Fragment() {
                 navigateToPost(post)
             }
         )
-        binding.list.adapter = featuredAdapter
+        setRecyclerViewAdapter(featuredAdapter)
         observeFeaturedPosts(featuredAdapter)
     }
 
@@ -65,6 +65,10 @@ class FeaturedFragment : Fragment() {
     private fun navigateToPost(post: Post) {
         val action = FeaturedFragmentDirections.actionFeaturedFragmentToPostFragment(post.id)
         findNavController().navigate(action)
+    }
+
+    private fun setRecyclerViewAdapter(featuredAdapter: FeaturedPostRecyclerViewAdapter) {
+        binding.list.adapter = featuredAdapter
     }
 
     private fun observeFeaturedPosts(featuredAdapter: FeaturedPostRecyclerViewAdapter) {

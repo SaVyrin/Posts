@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import retrofit2.Response
 import ru.surf.gallery.database.PostDao
 import ru.surf.gallery.database.UserDao
 import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.database.UserTokenDao
+import ru.surf.gallery.rest.LogoutResponse
 import ru.surf.gallery.rest.PostApi
 
 class ProfileViewModel(
@@ -34,8 +34,7 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 mutableLogoutStatus.value = LogoutStatus.IN_PROGRESS
-                val postApi = PostApi.create()
-                val logoutResponse = postApi.logout("Token $token")
+                val logoutResponse = sendLogoutRequest()
                 when (logoutResponse.code()) {
                     204, 401 -> {
                         clearUserData()
@@ -47,6 +46,11 @@ class ProfileViewModel(
                 mutableLogoutStatus.value = LogoutStatus.ERROR
             }
         }
+    }
+
+    private suspend fun sendLogoutRequest(): Response<LogoutResponse> {
+        val postApi = PostApi.create()
+        return postApi.logout("Token $token")
     }
 
     private suspend fun clearUserData() {

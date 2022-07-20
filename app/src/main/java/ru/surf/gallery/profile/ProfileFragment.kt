@@ -11,7 +11,6 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
-import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 
@@ -26,7 +25,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         getViewModelFactory()
         return binding.root
@@ -34,7 +33,9 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setLogoutButtonClickListener()
+
         observeUser()
         observerUserToken()
         observeLogoutStatus()
@@ -51,24 +52,17 @@ class ProfileFragment : Fragment() {
 
     private fun setLogoutButtonClickListener() {
         binding.logoutBtn.setOnClickListener {
-            ProfileConfirmationDialog {
-                viewModel.logOutUser()
-            }.show(
-                childFragmentManager,
-                ProfileConfirmationDialog.TAG
-            )
+            showLogoutDialog()
         }
     }
 
-    private fun observerUserToken() {
-        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
-            userToken?.let {
-                if (userToken.isNotEmpty()) {
-                    val userToken = it[0]
-                    viewModel.setUserToken(userToken)
-                }
-            }
-        }
+    private fun showLogoutDialog() {
+        ProfileConfirmationDialog {
+            viewModel.logOutUser()
+        }.show(
+            childFragmentManager,
+            ProfileConfirmationDialog.TAG
+        )
     }
 
     private fun observeUser() {
@@ -87,24 +81,31 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun observerUserToken() {
+        viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
+            userToken?.let {
+                if (userToken.isNotEmpty()) {
+                    val userToken = it[0]
+                    viewModel.setUserToken(userToken)
+                }
+            }
+        }
+    }
+
     private fun observeLogoutStatus() {
         viewModel.logoutStatus.observe(viewLifecycleOwner) { logoutStatus ->
             logoutStatus?.let {
                 when (logoutStatus) {
-                    LogoutStatus.IN_PROGRESS -> {
-                        binding.logoutBtn.isLoading = true
-                    }
                     LogoutStatus.LOGGED_OUT -> {
-                        binding.logoutBtn.isLoading = false
-                        findNavController().navigate(R.id.action_fragmentProfile_to_loginFragment)
+                        showLoggedOutScreenState()
+                        navigateToLoginScreen()
+                    }
+                    LogoutStatus.IN_PROGRESS -> {
+                        showInProgressScreenState()
                     }
                     LogoutStatus.ERROR -> {
-                        binding.logoutBtn.isLoading = false
-                        Snackbar.make(
-                            binding.root,
-                            R.string.can_not_logout_error,
-                            Snackbar.LENGTH_LONG
-                        ).setAnchorView(binding.logoutBtn).show()
+                        showLogoutErrorScreenState()
+                        showLogoutErrorSnackbar()
                     }
                     LogoutStatus.NOT_LOGGED_OUT -> {
                         // Do nothing
@@ -112,6 +113,30 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showLoggedOutScreenState() {
+        binding.logoutBtn.isLoading = false
+    }
+
+    private fun navigateToLoginScreen() {
+        findNavController().navigate(R.id.action_fragmentProfile_to_loginFragment)
+    }
+
+    private fun showInProgressScreenState() {
+        binding.logoutBtn.isLoading = true
+    }
+
+    private fun showLogoutErrorScreenState() {
+        binding.logoutBtn.isLoading = false
+    }
+
+    private fun showLogoutErrorSnackbar() {
+        Snackbar.make(
+            binding.root,
+            R.string.can_not_logout_error,
+            Snackbar.LENGTH_LONG
+        ).setAnchorView(binding.logoutBtn).show()
     }
 
     override fun onDestroyView() {

@@ -39,17 +39,18 @@ class LoginViewModel(
         password = newPasswordValue
     }
 
-    suspend fun logInUser() {
+    fun logInUser() {
         if (validateInputs()) {
             viewModelScope.launch {
                 try {
                     mutableLoginStatus.value = LoginStatus.IN_PROGRESS
+
                     val loginResponse = sendLoginRequest()
                     addTokenToDb(loginResponse.token)
                     addUserToDb(loginResponse.userInfo)
+
                     Log.e("Request", loginResponse.token)
                     mutableLoginStatus.value = LoginStatus.LOGGED_IN
-                    // TODO добавить обработку ошибок
                 } catch (error: Throwable) {
                     mutableLoginStatus.value = LoginStatus.ERROR
                 }

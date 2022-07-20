@@ -8,9 +8,8 @@ import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentSearchBinding
 import ru.surf.gallery.main.MainPostRecyclerViewAdapter
@@ -26,7 +25,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         getViewModelFactory()
         return binding.root
@@ -34,9 +33,11 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setBackArrowClickListener()
         setSearchViewTextListener()
-        setRecyclerViewAdapter()
+        initRecyclerView()
+
         observePostsFromDao()
         observeSearchStatus()
     }
@@ -49,8 +50,12 @@ class SearchFragment : Fragment() {
 
     private fun setBackArrowClickListener() {
         binding.backArrowImage.setOnClickListener {
-            findNavController().popBackStack()
+            returnToMainScreen()
         }
+    }
+
+    private fun returnToMainScreen() {
+        findNavController().popBackStack()
     }
 
     private fun setSearchViewTextListener() {
@@ -65,24 +70,33 @@ class SearchFragment : Fragment() {
                     // task HERE
                     return false
                 }
-
             })
     }
 
-    private fun setRecyclerViewAdapter() {
+    private fun initRecyclerView() {
         val mainAdapter = MainPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                lifecycleScope.launch {
-                    viewModel.featuredIconClicked(post)
-                }
+                removePostFromFeatured(post)
             },
             navigateClickListener = { post ->
-                val action = SearchFragmentDirections.actionSearchFragmentToPostFragment(post.id)
-                findNavController().navigate(action)
+                navigateToPost(post)
             }
         )
-        binding.showResults.list.adapter = mainAdapter
+        setRecyclerViewAdapter(mainAdapter)
         observePostsToShow(mainAdapter)
+    }
+
+    private fun removePostFromFeatured(post: Post) {
+        viewModel.removeFromFeatured(post)
+    }
+
+    private fun navigateToPost(post: Post) {
+        val action = SearchFragmentDirections.actionSearchFragmentToPostFragment(post.id)
+        findNavController().navigate(action)
+    }
+
+    private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
+        binding.showResults.list.adapter = mainAdapter
     }
 
     private fun observePostsToShow(mainAdapter: MainPostRecyclerViewAdapter) {
@@ -106,22 +120,34 @@ class SearchFragment : Fragment() {
             searchStatus?.let {
                 when (searchStatus) {
                     SearchStatus.NOT_SEARCHING -> {
-                        binding.notSearching.root.isVisible = true
-                        binding.showResults.root.isVisible = false
-                        binding.noResults.root.isVisible = false
+                        showNotSearchingState()
                     }
                     SearchStatus.NO_RESULTS -> {
-                        binding.notSearching.root.isVisible = false
-                        binding.noResults.root.isVisible = true
-                        binding.showResults.root.isVisible = false
+                        showNoResultsSearchState()
                     }
                     SearchStatus.SHOW_RESULTS -> {
-                        binding.notSearching.root.isVisible = false
-                        binding.noResults.root.isVisible = false
-                        binding.showResults.root.isVisible = true
+                        showSuccessfulSearchState()
                     }
                 }
             }
         }
+    }
+
+    private fun showNotSearchingState() {
+        binding.notSearching.root.isVisible = true
+        binding.showResults.root.isVisible = false
+        binding.noResults.root.isVisible = false
+    }
+
+    private fun showNoResultsSearchState() {
+        binding.notSearching.root.isVisible = false
+        binding.noResults.root.isVisible = true
+        binding.showResults.root.isVisible = false
+    }
+
+    private fun showSuccessfulSearchState() {
+        binding.notSearching.root.isVisible = false
+        binding.noResults.root.isVisible = false
+        binding.showResults.root.isVisible = true
     }
 }

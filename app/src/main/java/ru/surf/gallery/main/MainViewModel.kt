@@ -33,16 +33,31 @@ class MainViewModel(
     fun getPosts() {
         viewModelScope.launch {
             try {
-                mutablePostsRequestStatus.value = PostsRequestStatus.IN_PROGRESS
-                val postsResponse = sendPostsRequest(userToken)
-                addPostsToDb(postsResponse)
-                Log.e("Request", "$postsResponse")
-                mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
-                // TODO добавить обработку ошибок
+                mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
+                getPostsFromRest()
             } catch (error: Throwable) {
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
             }
         }
+    }
+
+    fun refreshPosts() {
+        viewModelScope.launch {
+            try {
+                mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
+                getPostsFromRest()
+            } catch (error: Throwable) {
+                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
+            }
+        }
+    }
+
+    private suspend fun getPostsFromRest() {
+        val postsResponse = sendPostsRequest(userToken)
+        addPostsToDb(postsResponse)
+        Log.e("Request", "$postsResponse")
+        mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
+        // TODO добавить обработку ошибок
     }
 
     private suspend fun sendPostsRequest(userToken: String): List<PostResponse> {

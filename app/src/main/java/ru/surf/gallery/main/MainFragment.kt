@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentMainBinding
@@ -38,6 +36,7 @@ class MainFragment : Fragment() {
         setSearchClickListener()
         setRecyclerViewAdapter()
         setErrorLoadButtonClickListener()
+        setRefreshLayoutListener()
         observeUserToken()
         observePostsRequestStatus()
     }
@@ -77,6 +76,14 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun setRefreshLayoutListener() {
+        binding.mainList.swipeRefreshLayout.setOnRefreshListener {
+            // TODO добавить включение и выключение, когда список пустой
+            // TODO добавить включение и выключение кнопки поиска, когда список пустой
+            viewModel.refreshPosts()
+        }
+    }
+
     private fun observeUserToken() {
         viewModel.userTokenFromDao.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
@@ -90,7 +97,7 @@ class MainFragment : Fragment() {
         viewModel.postsRequestStatus.observe(viewLifecycleOwner) { postsRequest ->
             postsRequest?.let {
                 when (postsRequest) {
-                    PostsRequestStatus.IN_PROGRESS -> {
+                    PostsRequestStatus.LOADING -> {
                         binding.mainList.root.isVisible = false
                         binding.imageView.isVisible = false
                         binding.mainLoader.root.isVisible = true
@@ -101,23 +108,29 @@ class MainFragment : Fragment() {
                         binding.imageView.isVisible = true
                         binding.mainLoader.root.isVisible = false
                         binding.mainErrorLoad.root.isVisible = false
-                    }
-                    PostsRequestStatus.ERROR_RELOAD -> {
-                        binding.mainList.root.isVisible = true
-                        binding.imageView.isVisible = true
-                        binding.mainLoader.root.isVisible = false
-                        binding.mainErrorLoad.root.isVisible = false
-                        Snackbar.make(
-                            binding.root,
-                            R.string.main_screen_reload_error,
-                            Snackbar.LENGTH_LONG
-                        ).show()
+                        binding.mainList.swipeRefreshLayout.isRefreshing = false
                     }
                     PostsRequestStatus.ERROR_LOAD -> {
                         binding.mainList.root.isVisible = false
                         binding.imageView.isVisible = false
                         binding.mainLoader.root.isVisible = false
                         binding.mainErrorLoad.root.isVisible = true
+                    }
+                    PostsRequestStatus.ERROR_REFRESH -> {
+                        binding.mainList.root.isVisible = true
+                        binding.imageView.isVisible = true
+                        binding.mainLoader.root.isVisible = false
+                        binding.mainErrorLoad.root.isVisible = false
+                        binding.mainList.swipeRefreshLayout.isRefreshing = false
+                        Snackbar.make(
+                            binding.root,
+                            R.string.main_screen_reload_error,
+                            Snackbar.LENGTH_LONG
+                        ).setAnchorView(requireActivity().findViewById(R.id.bottomNavigationView3))
+                            .show()
+                    }
+                    PostsRequestStatus.REFRESHING -> {
+                        // DO nothing
                     }
                 }
             }

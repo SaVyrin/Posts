@@ -42,7 +42,7 @@ class FeaturedPostRecyclerViewAdapter(
             binding.name.text = item.title
             binding.content.text = item.content
             binding.image.load(item.photoUrl)
-            binding.date.text = item.publicationDate.toString()
+            binding.date.text = item.publicationDate
             binding.featuredImage.setOnClickListener { featuredClickListener(item) }
             binding.root.setOnClickListener { navigateClickListener(item) }
         }

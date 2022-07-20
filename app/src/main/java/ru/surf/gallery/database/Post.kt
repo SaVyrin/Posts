@@ -20,7 +20,7 @@ data class Post(
     val photoUrl: String = "",
 
     @ColumnInfo(name = "publication_date")
-    val publicationDate: Long = 0,
+    val publicationDate: String = "",
 
     @ColumnInfo(name = "post_in_featured")
     var inFeatured: Boolean = false

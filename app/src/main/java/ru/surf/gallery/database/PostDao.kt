@@ -24,7 +24,7 @@ interface PostDao {
     @Query("SELECT * FROM post_table ORDER BY post_id DESC")
     fun getAll(): LiveData<List<Post>>
 
-    @Query("SELECT * FROM post_table WHERE post_in_featured > 0")
+    @Query("SELECT * FROM post_table WHERE post_in_featured > 0 ORDER BY in_featured_date DESC")
     fun getFeaturedPosts(): LiveData<List<Post>>
 
     @Query("DELETE FROM post_table")

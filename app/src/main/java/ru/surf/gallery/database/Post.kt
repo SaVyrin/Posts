@@ -23,5 +23,8 @@ data class Post(
     val publicationDate: String = "",
 
     @ColumnInfo(name = "post_in_featured")
-    var inFeatured: Boolean = false
+    var inFeatured: Boolean = false,
+
+    @ColumnInfo(name = "in_featured_date")
+    var inFeaturedDate: Long = 0
 )

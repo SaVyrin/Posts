@@ -13,6 +13,8 @@ import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
+import ru.surf.gallery.utils.formatPhone
+import ru.surf.gallery.utils.withQuotation
 
 class ProfileFragment : Fragment() {
 
@@ -72,8 +74,8 @@ class ProfileFragment : Fragment() {
                     val user = it[0]
                     binding.avatar.load(user.avatar)
                     binding.name.text = "${user.firstName} ${user.lastName}"
-                    binding.about.text = user.about
-                    binding.phone.text = user.phone
+                    binding.about.text = user.about.withQuotation()
+                    binding.phone.text = user.phone.formatPhone()
                     binding.city.text = user.city
                     binding.email.text = user.email
                 }

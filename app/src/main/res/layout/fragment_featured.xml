@@ -36,7 +36,6 @@
         android:text="Первый день в Surf"
         android:textAppearance="@style/Text.Medium.16"
         android:textColor="@color/black"
-        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image" />
@@ -49,7 +48,6 @@
         android:text="12.05.2022"
         android:textAppearance="@style/Text.Medium.10"
         android:textColor="@color/gray_600"
-        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
@@ -64,7 +62,6 @@
         android:text="Сегодня был мой первый день в студии Surf..."
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/black"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name" />

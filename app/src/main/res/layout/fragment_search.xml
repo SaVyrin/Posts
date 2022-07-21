@@ -16,25 +16,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_view"
+        style="@style/SearchTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_search_view_rounded"
-        android:closeIcon="@drawable/ic_cancel"
-        android:iconifiedByDefault="false"
-        android:paddingStart="-8dp"
-        android:paddingEnd="-4dp"
-        android:queryBackground="@color/transparent"
-        android:queryHint="Поиск"
-        android:searchIcon="@drawable/ic_field_search"
-        android:theme="@style/SearchView.Montserrat14"
+        app:endIconDrawable="@drawable/ic_cancel"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_arrow_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_view_et"
+            style="@style/SearchTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_field_search"
+            android:drawablePadding="11dp"
+            android:hint="@string/search_screen_hint_text"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLength="255"
+            android:maxLines="1"
+            android:paddingVertical="11dp"
+            tools:layout_editor_absoluteX="56dp"
+            tools:layout_editor_absoluteY="118dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <include
         android:id="@+id/not_searching_layout"

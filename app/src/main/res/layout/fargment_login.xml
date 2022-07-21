@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
+            android:maxLength="255"
             android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>

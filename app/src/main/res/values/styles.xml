@@ -23,6 +23,26 @@
         <item name="android:textAppearance">@style/Text.Medium.16</item>
     </style>
 
+    <style name="SearchTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/search_hint_text_color</item>
+        <item name="android:textColorHint">@color/search_hint_text_color</item>
+        <item name="boxBackgroundColor">@color/search_box_background_color</item>
+        <item name="boxCornerRadiusTopEnd">22dp</item>
+        <item name="boxCornerRadiusTopStart">22dp</item>
+        <item name="boxCornerRadiusBottomStart">22dp</item>
+        <item name="boxCornerRadiusBottomEnd">22dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeColor">@color/transparent</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="endIconTint">@color/search_end_icon_color_color</item>
+    </style>
+
+    <style name="SearchTextInputEditText">
+        <item name="android:textAppearance">@style/Text.Medium.14</item>
+        <item name="background">@color/transparent</item>
+    </style>
+
+
     <style name="Button.Login" parent="ThemeOverlay.AppCompat">
         <item name="colorPrimary">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>

@@ -41,4 +41,9 @@
         <item name="android:textAppearance">@style/Text.Medium.14</item>
     </style>
 
+    <style name="SearchView.Montserrat14" parent="Widget.AppCompat.SearchView">
+        <item name="android:textAppearance">@style/Text.Medium.14</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

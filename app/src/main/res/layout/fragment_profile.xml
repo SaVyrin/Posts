@@ -25,9 +25,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="23dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/name"
@@ -36,13 +36,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="16dp"
-        android:text="Александра
-Новикова"
         android:textAppearance="@style/Text.Medium.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="Александра Новикова" />
 
     <TextView
         android:id="@+id/about"
@@ -51,13 +50,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="“Светлое будущее живет
-в вечности”"
         android:textAppearance="@style/Text.LightItalic.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="“Светлое будущее живет в вечности”" />
 
     <TextView
         android:id="@+id/textView2"
@@ -65,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="26dp"
-        android:text="Город"
+        android:text="@string/profile_screen_town"
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,11 +75,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="2dp"
-        android:text="Санкт-Петербург"
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:text="Санкт-Петербург" />
 
     <View
         android:id="@+id/view"
@@ -98,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
-        android:text="Телефон"
+        android:text="@string/profile_screen_phone_number"
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,11 +108,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="2dp"
-        android:text="+ 7 (961) 187 17 44"
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:text="+ 7 (961) 187 17 44" />
 
     <View
         android:id="@+id/view1"
@@ -131,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Почта"
+        android:text="@string/profile_screen_email"
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,11 +141,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="2dp"
-        android:text="alexandra@surfstudio.ru"
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:text="alexandra@surfstudio.ru" />
 
     <View
         android:id="@+id/view2"

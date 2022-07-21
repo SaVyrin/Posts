@@ -53,8 +53,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setSearchClickListener() {
-        binding.imageView.setOnClickListener {
+        binding.search.setOnMenuItemClickListener {
             navigateToSearchScreen()
+            true
         }
     }
 
@@ -153,14 +154,14 @@ class MainFragment : Fragment() {
 
     private fun showLoadingScreenState() {
         binding.mainList.root.isVisible = false
-        binding.imageView.isVisible = false
+        binding.search.isVisible = false
         binding.mainLoader.root.isVisible = true
         binding.mainErrorLoad.root.isVisible = false
     }
 
     private fun showSuccessScreenState() {
         binding.mainList.root.isVisible = true
-        binding.imageView.isVisible = true
+        binding.search.isVisible = true
         binding.mainLoader.root.isVisible = false
         binding.mainErrorLoad.root.isVisible = false
         binding.mainList.swipeRefreshLayout.isRefreshing = false
@@ -168,14 +169,14 @@ class MainFragment : Fragment() {
 
     private fun showErrorLoadScreenState() {
         binding.mainList.root.isVisible = false
-        binding.imageView.isVisible = false
+        binding.search.isVisible = false
         binding.mainLoader.root.isVisible = false
         binding.mainErrorLoad.root.isVisible = true
     }
 
     private fun showErrorRefreshScreenState() {
         binding.mainList.root.isVisible = true
-        binding.imageView.isVisible = true
+        binding.search.isVisible = true
         binding.mainLoader.root.isVisible = false
         binding.mainErrorLoad.root.isVisible = false
         binding.mainList.swipeRefreshLayout.isRefreshing = false

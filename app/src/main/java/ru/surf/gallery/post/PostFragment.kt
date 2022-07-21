@@ -47,7 +47,7 @@ class PostFragment : Fragment() {
     }
 
     private fun setBackArrowClickListener() {
-        binding.backArrowImage.setOnClickListener {
+        binding.backArrow.setNavigationOnClickListener {
             returnToPreviousScreen()
         }
     }

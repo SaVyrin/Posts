@@ -54,7 +54,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setBackArrowClickListener() {
-        binding.backArrowImage.setOnClickListener {
+        binding.backArrow.setNavigationOnClickListener {
             returnToMainScreen()
         }
     }

@@ -7,7 +7,9 @@ import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.login.LoginStatus
 
-class SplashViewModel(userTokenDao: UserTokenDao) : ViewModel() {
+class SplashViewModel(
+    userTokenDao: UserTokenDao
+) : ViewModel() {
 
     val userToken = userTokenDao.getAll()
     private val mutableLogInStatus = MutableLiveData(LoginStatus.NOT_LOGGED_IN)

@@ -13,10 +13,11 @@ import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.rest.LoginRequest
 import ru.surf.gallery.rest.LoginResponse
 import ru.surf.gallery.rest.PostApi
+import ru.surf.gallery.utils.toUser
 
 class LoginViewModel(
-    val userTokenDao: UserTokenDao,
-    val userDao: UserDao
+    private val userTokenDao: UserTokenDao,
+    private val userDao: UserDao
 ) : ViewModel() {
 
     private val mutableLoginStatus = MutableLiveData(LoginStatus.NOT_LOGGED_IN)
@@ -47,7 +48,7 @@ class LoginViewModel(
 
                     val loginResponse = sendLoginRequest()
                     addTokenToDb(loginResponse.token)
-                    addUserToDb(loginResponse.userInfo)
+                    addUserToDb(loginResponse.userInfo.toUser())
 
                     Log.e("Request", loginResponse.token)
                     mutableLoginStatus.value = LoginStatus.LOGGED_IN

@@ -14,9 +14,9 @@ import ru.surf.gallery.rest.LogoutResponse
 import ru.surf.gallery.rest.PostApi
 
 class ProfileViewModel(
-    val userTokenDao: UserTokenDao,
-    val userDao: UserDao,
-    val postDao: PostDao
+    private val userTokenDao: UserTokenDao,
+    private val userDao: UserDao,
+    private val postDao: PostDao
 ) : ViewModel() {
 
     private val mutableLogoutStatus = MutableLiveData(LogoutStatus.NOT_LOGGED_OUT)

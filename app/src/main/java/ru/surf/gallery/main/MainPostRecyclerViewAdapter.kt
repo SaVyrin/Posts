@@ -2,13 +2,13 @@ package ru.surf.gallery.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ru.surf.gallery.R
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentMainListItemBinding
+import ru.surf.gallery.utils.PostDiffItemCallback
 
 class MainPostRecyclerViewAdapter(
     private val featuredClickListener: (post: Post) -> Unit,
@@ -49,13 +49,5 @@ class MainPostRecyclerViewAdapter(
             binding.featuredImage.setOnClickListener { featuredClickListener(item) }
             binding.root.setOnClickListener { navigateClickListener(item) }
         }
-    }
-
-    class PostDiffItemCallback : DiffUtil.ItemCallback<Post>() {
-        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
-            (oldItem.id == newItem.id)
-
-        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
-            (oldItem == newItem)
     }
 }

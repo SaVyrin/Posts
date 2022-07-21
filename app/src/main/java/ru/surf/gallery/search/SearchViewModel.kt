@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDao
+import ru.surf.gallery.utils.createUpdatedPost
 
 class SearchViewModel(
     private val postDao: PostDao
@@ -62,23 +63,10 @@ class SearchViewModel(
     }
 
     private suspend fun addToFeatured(post: Post) {
-        postDao.update(createUpdatedPost(true, post))
+        postDao.update(post.createUpdatedPost(true))
     }
 
     private suspend fun removeFromFeatured(post: Post) {
-        postDao.update(createUpdatedPost(false, post))
-    }
-
-    private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {
-        val currentTime = System.currentTimeMillis()
-        return Post(
-            post.id,
-            post.title,
-            post.content,
-            post.photoUrl,
-            post.publicationDate,
-            inFeatured,
-            currentTime
-        )
+        postDao.update(post.createUpdatedPost(false))
     }
 }

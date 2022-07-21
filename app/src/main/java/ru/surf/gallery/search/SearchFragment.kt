@@ -96,7 +96,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
-        binding.showResults.list.adapter = mainAdapter
+        binding.showResultsLayout.list.adapter = mainAdapter
     }
 
     private fun observePostsToShow(mainAdapter: MainPostRecyclerViewAdapter) {
@@ -134,20 +134,20 @@ class SearchFragment : Fragment() {
     }
 
     private fun showNotSearchingState() {
-        binding.notSearching.root.isVisible = true
-        binding.showResults.root.isVisible = false
-        binding.noResults.root.isVisible = false
+        binding.notSearchingLayout.root.isVisible = true
+        binding.showResultsLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = false
     }
 
     private fun showNoResultsSearchState() {
-        binding.notSearching.root.isVisible = false
-        binding.noResults.root.isVisible = true
-        binding.showResults.root.isVisible = false
+        binding.notSearchingLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = true
+        binding.showResultsLayout.root.isVisible = false
     }
 
     private fun showSuccessfulSearchState() {
-        binding.notSearching.root.isVisible = false
-        binding.noResults.root.isVisible = false
-        binding.showResults.root.isVisible = true
+        binding.notSearchingLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = false
+        binding.showResultsLayout.root.isVisible = true
     }
 }

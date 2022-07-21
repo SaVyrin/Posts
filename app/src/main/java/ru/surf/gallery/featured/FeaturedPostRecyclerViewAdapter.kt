@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ru.surf.gallery.database.Post
-import ru.surf.gallery.databinding.FragmentFeaturedBinding
+import ru.surf.gallery.databinding.FragmentFeaturedListItemBinding
 
 class FeaturedPostRecyclerViewAdapter(
     private val featuredClickListener: (post: Post) -> Unit,
@@ -23,13 +23,13 @@ class FeaturedPostRecyclerViewAdapter(
         holder.bind(item, featuredClickListener, navigateClickListener)
     }
 
-    class PostItemViewHolder(private val binding: FragmentFeaturedBinding) :
+    class PostItemViewHolder(private val binding: FragmentFeaturedListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun inflateFrom(parent: ViewGroup): PostItemViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FragmentFeaturedBinding.inflate(layoutInflater, parent, false)
+                val binding = FragmentFeaturedListItemBinding.inflate(layoutInflater, parent, false)
                 return PostItemViewHolder(binding)
             }
         }

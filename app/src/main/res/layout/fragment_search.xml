@@ -34,8 +34,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/not_searching"
-        layout="@layout/fragment_default_search"
+        android:id="@+id/not_searching_layout"
+        layout="@layout/fragment_search_default"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="19dp"
@@ -46,8 +46,8 @@
         app:layout_constraintTop_toBottomOf="@id/search_view" />
 
     <include
-        android:id="@+id/show_results"
-        layout="@layout/fragment_posts"
+        android:id="@+id/show_results_layout"
+        layout="@layout/fragment_search_posts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="19dp"
@@ -58,8 +58,8 @@
         app:layout_constraintTop_toBottomOf="@id/search_view" />
 
     <include
-        android:id="@+id/no_results"
-        layout="@layout/fragment_no_results"
+        android:id="@+id/no_results_layout"
+        layout="@layout/fragment_search_no_results"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="19dp"
@@ -69,17 +69,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_view" />
 
-    <!--
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="19dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view"
-        app:navGraph="@navigation/search_screen_nav_graph" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,7 +53,7 @@
         android:id="@+id/featuredFragment"
         android:name="ru.surf.gallery.featured.FeaturedFragment"
         android:label="fragment_featured_list"
-        tools:layout="@layout/fragment_featured_list">
+        tools:layout="@layout/fragment_featured">
         <action
             android:id="@+id/action_featuredFragment_to_postFragment"
             app:destination="@id/postFragment"

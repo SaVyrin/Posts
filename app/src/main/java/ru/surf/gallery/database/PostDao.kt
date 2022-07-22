@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy.IGNORE
 
 @Dao
 interface PostDao {
-    @Insert(onConflict = IGNORE) // TODO убрать onConflict
+    @Insert(onConflict = IGNORE)
     suspend fun insert(post: Post)
 
     @Insert(onConflict = IGNORE)
@@ -21,7 +21,7 @@ interface PostDao {
     @Query("SELECT * FROM post_table WHERE post_id = :postId")
     fun get(postId: String): LiveData<Post>
 
-    @Query("SELECT * FROM post_table ORDER BY post_id DESC")
+    @Query("SELECT * FROM post_table")
     fun getAll(): LiveData<List<Post>>
 
     @Query("SELECT * FROM post_table WHERE post_in_featured > 0 ORDER BY in_featured_date DESC")
@@ -29,6 +29,4 @@ interface PostDao {
 
     @Query("DELETE FROM post_table")
     suspend fun deleteAll()
-
-    // TODO сделать получение только 1 поста
 }

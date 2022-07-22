@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import ru.surf.gallery.database.PostDao
@@ -11,19 +12,22 @@ import ru.surf.gallery.database.UserDao
 import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.rest.LogoutResponse
-import ru.surf.gallery.rest.PostApi
+import ru.surf.gallery.rest.NetworkApi
+import javax.inject.Inject
 
-class ProfileViewModel(
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
     private val userTokenDao: UserTokenDao,
     private val userDao: UserDao,
-    private val postDao: PostDao
+    private val postDao: PostDao,
+    private val networkApi: NetworkApi
 ) : ViewModel() {
 
     private val mutableLogoutStatus = MutableLiveData(LogoutStatus.NOT_LOGGED_OUT)
     val logoutStatus: LiveData<LogoutStatus> = mutableLogoutStatus
 
-    val user = userDao.getAll()
-    val userToken = userTokenDao.getAll()
+    val user = userDao.get()
+    val userToken = userTokenDao.get()
     private var token = ""
 
     fun setUserToken(newUserToken: UserToken) {
@@ -49,8 +53,7 @@ class ProfileViewModel(
     }
 
     private suspend fun sendLogoutRequest(): Response<LogoutResponse> {
-        val postApi = PostApi.create()
-        return postApi.logout("Token $token")
+        return networkApi.logout("Token $token")
     }
 
     private suspend fun clearUserData() {

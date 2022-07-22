@@ -1,13 +1,18 @@
 package ru.surf.gallery.utils
 
-import kotlinx.serialization.SerialName
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.User
+import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.rest.PostResponse
 import ru.surf.gallery.rest.UserResponse
 import java.text.SimpleDateFormat
 import java.util.*
 
+fun String.toUserToken(): UserToken {
+    return UserToken(
+        this
+    )
+}
 
 fun UserResponse.toUser(): User {
     return User(

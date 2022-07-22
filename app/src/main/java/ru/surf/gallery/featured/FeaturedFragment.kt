@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.database.Post
-import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentFeaturedBinding
 import ru.surf.gallery.dialog.FeaturedConfirmationDialog
 
+
+@AndroidEntryPoint
 class FeaturedFragment : Fragment() {
 
-    private lateinit var featuredViewModelFactory: FeaturedViewModelFactory
-    private val viewModel: FeaturedViewModel by viewModels { featuredViewModelFactory }
+    private val viewModel: FeaturedViewModel by viewModels()
 
     private var _binding: FragmentFeaturedBinding? = null
     private val binding get() = _binding!!
@@ -25,19 +26,12 @@ class FeaturedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFeaturedBinding.inflate(inflater, container, false)
-        getViewModelFactory()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-    }
-
-    private fun getViewModelFactory() {
-        val application = requireNotNull(this.activity).application
-        val postDao = PostDatabase.getInstance(application).postDao
-        featuredViewModelFactory = FeaturedViewModelFactory(postDao)
     }
 
     private fun initRecyclerView() {

@@ -7,8 +7,15 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var navOptions: NavOptions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,22 +24,12 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView3)
         bottomNavView.setupWithNavController(navController)
-        // TODO перенести в di
-        val options = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.navigation.ui.R.anim.nav_default_enter_anim)
-            .setExitAnim(androidx.navigation.ui.R.anim.nav_default_exit_anim)
-            .setPopEnterAnim(androidx.navigation.ui.R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(androidx.navigation.ui.R.anim.nav_default_pop_exit_anim)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
 
         bottomNavView.setOnItemSelectedListener { menuItem ->
             navController.popBackStack(R.id.mainFragment, false)
-            navController.navigate(menuItem.itemId,null, options)
+            navController.navigate(menuItem.itemId, null, navOptions)
             true
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->

@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.R
 import ru.surf.gallery.database.Post
-import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentMainBinding
 
+
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    private lateinit var mainViewModelFactory: MainViewModelFactory
-    private val viewModel: MainViewModel by viewModels { mainViewModelFactory }
+    private val viewModel: MainViewModel by viewModels()
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -27,7 +28,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        getViewModelFactory()
         return binding.root
     }
 
@@ -41,15 +41,6 @@ class MainFragment : Fragment() {
 
         observeUserToken()
         observePostsRequestStatus()
-    }
-
-    private fun getViewModelFactory() {
-        val application = requireNotNull(this.activity).application
-        val database = PostDatabase.getInstance(application)
-        val userTokenDao = database.userTokenDao
-        val userDao = database.userDao
-        val postDao = database.postDao
-        mainViewModelFactory = MainViewModelFactory(userTokenDao, userDao, postDao)
     }
 
     private fun setSearchClickListener() {
@@ -116,10 +107,7 @@ class MainFragment : Fragment() {
     private fun observeUserToken() {
         viewModel.userTokenFromDao.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
-                if (userToken.isNotEmpty()) {
-                    val userToken = userToken[0]
-                    viewModel.setUserToken(userToken)
-                }
+                viewModel.setUserToken(userToken)
             }
         }
     }

@@ -9,17 +9,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.R
-import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 import ru.surf.gallery.utils.formatPhone
 import ru.surf.gallery.utils.withQuotation
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
-    private lateinit var profileViewModelFactory: ProfileViewModelFactory
-    private val viewModel: ProfileViewModel by viewModels { profileViewModelFactory }
+    private val viewModel: ProfileViewModel by viewModels()
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -29,7 +29,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        getViewModelFactory()
         return binding.root
     }
 
@@ -37,19 +36,9 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setLogoutButtonClickListener()
-
         observeUser()
         observerUserToken()
         observeLogoutStatus()
-    }
-
-    private fun getViewModelFactory() {
-        val application = requireNotNull(this.activity).application
-        val database = PostDatabase.getInstance(application)
-        val userTokenDao = database.userTokenDao
-        val userDao = database.userDao
-        val postDao = database.postDao
-        profileViewModelFactory = ProfileViewModelFactory(userTokenDao, userDao, postDao)
     }
 
     private fun setLogoutButtonClickListener() {
@@ -70,15 +59,12 @@ class ProfileFragment : Fragment() {
     private fun observeUser() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
-                if (user.isNotEmpty()) {
-                    val user = it[0]
-                    binding.avatar.load(user.avatar)
-                    binding.name.text = "${user.firstName} ${user.lastName}"
-                    binding.about.text = user.about.withQuotation()
-                    binding.phone.text = user.phone.formatPhone()
-                    binding.city.text = user.city
-                    binding.email.text = user.email
-                }
+                binding.avatar.load(user.avatar)
+                binding.name.text = "${user.firstName} ${user.lastName}"
+                binding.about.text = user.about.withQuotation()
+                binding.phone.text = user.phone.formatPhone()
+                binding.city.text = user.city
+                binding.email.text = user.email
             }
         }
     }
@@ -86,10 +72,7 @@ class ProfileFragment : Fragment() {
     private fun observerUserToken() {
         viewModel.userToken.observe(viewLifecycleOwner) { userToken ->
             userToken?.let {
-                if (userToken.isNotEmpty()) {
-                    val userToken = it[0]
-                    viewModel.setUserToken(userToken)
-                }
+                viewModel.setUserToken(userToken)
             }
         }
     }

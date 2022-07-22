@@ -1,10 +1,10 @@
 package ru.surf.gallery.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.surf.gallery.database.User
 import ru.surf.gallery.database.UserDao
@@ -12,12 +12,16 @@ import ru.surf.gallery.database.UserToken
 import ru.surf.gallery.database.UserTokenDao
 import ru.surf.gallery.rest.LoginRequest
 import ru.surf.gallery.rest.LoginResponse
-import ru.surf.gallery.rest.PostApi
+import ru.surf.gallery.rest.NetworkApi
 import ru.surf.gallery.utils.toUser
+import ru.surf.gallery.utils.toUserToken
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val userTokenDao: UserTokenDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val networkApi: NetworkApi
 ) : ViewModel() {
 
     private val mutableLoginStatus = MutableLiveData(LoginStatus.NOT_LOGGED_IN)
@@ -47,10 +51,9 @@ class LoginViewModel(
                     mutableLoginStatus.value = LoginStatus.IN_PROGRESS
 
                     val loginResponse = sendLoginRequest()
-                    addTokenToDb(loginResponse.token)
+                    addTokenToDb(loginResponse.token.toUserToken())
                     addUserToDb(loginResponse.userInfo.toUser())
 
-                    Log.e("Request", loginResponse.token)
                     mutableLoginStatus.value = LoginStatus.LOGGED_IN
                 } catch (error: Throwable) {
                     mutableLoginStatus.value = LoginStatus.ERROR
@@ -69,18 +72,14 @@ class LoginViewModel(
     }
 
     private suspend fun sendLoginRequest(): LoginResponse {
-        val postApi = PostApi.create()
-        return postApi.login(LoginRequest("+7$login", password))
+        return networkApi.login(LoginRequest("+7$login", password))
     }
 
-    private suspend fun addTokenToDb(tokenString: String) {
-        val userToken = UserToken(tokenString)
+    private suspend fun addTokenToDb(userToken: UserToken) {
         userTokenDao.insert(userToken)
-        Log.e("Request", "SUCCESS") // TODO убрать заменить или оставить логирование
     }
 
     private suspend fun addUserToDb(user: User) {
         userDao.insert(user)
-        Log.e("Request", "SUCCESS")
     }
 }

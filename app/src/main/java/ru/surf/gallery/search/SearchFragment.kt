@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.database.Post
-import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentSearchBinding
 import ru.surf.gallery.main.MainPostRecyclerViewAdapter
 import ru.surf.gallery.utils.hideKeyboard
 import ru.surf.gallery.utils.showKeyboard
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private lateinit var searchViewModelFactory: SearchViewModelFactory
-    private val viewModel: SearchViewModel by viewModels { searchViewModelFactory }
+    private val viewModel: SearchViewModel by viewModels()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -30,7 +30,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        getViewModelFactory()
         return binding.root
     }
 
@@ -45,12 +44,6 @@ class SearchFragment : Fragment() {
 
         observePostsFromDao()
         observeSearchStatus()
-    }
-
-    private fun getViewModelFactory() {
-        val application = requireNotNull(this.activity).application
-        val postDao = PostDatabase.getInstance(application).postDao
-        searchViewModelFactory = SearchViewModelFactory(postDao)
     }
 
     private fun setBackArrowClickListener() {

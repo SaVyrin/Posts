@@ -92,12 +92,16 @@ class LoginFragment : Fragment() {
                         showLoggedInScreenState()
                         navigateToMainScreen()
                     }
-                    LoginStatus.ERROR -> {
-                        showErrorScreenState()
-                        showErrorSnackbar()
-                    }
                     LoginStatus.IN_PROGRESS -> {
                         showInProgressScreenState()
+                    }
+                    LoginStatus.ERROR_WRONG_DATA -> {
+                        showErrorWrongDataScreenState()
+                        showErrorSnackbar(R.string.wrong_login_or_password_error)
+                    }
+                    LoginStatus.ERROR_INTERNET -> {
+                        showErrorNoInternetScreenState()
+                        showErrorSnackbar(R.string.login_no_internet_error)
                     }
                     LoginStatus.NOT_LOGGED_IN -> {
                         // Do nothing
@@ -109,24 +113,28 @@ class LoginFragment : Fragment() {
 
     private fun showLoggedInScreenState() {
         binding.btnLogin.isLoading = false
-
     }
 
     private fun navigateToMainScreen() {
         findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
     }
 
-    private fun showErrorScreenState() {
+    private fun showErrorWrongDataScreenState() {
         binding.btnLogin.isLoading = false
         binding.blockScreen.isVisible = false
         binding.login.error = " "
         binding.password.error = " "
     }
 
-    private fun showErrorSnackbar() {
+    private fun showErrorNoInternetScreenState() {
+        binding.btnLogin.isLoading = false
+        binding.blockScreen.isVisible = false
+    }
+
+    private fun showErrorSnackbar(errorTextId: Int) {
         Snackbar.make(
             binding.root,
-            R.string.wrong_login_or_password_error,
+            errorTextId,
             Snackbar.LENGTH_LONG
         ).setAnchorView(binding.btnLogin).show()
     }

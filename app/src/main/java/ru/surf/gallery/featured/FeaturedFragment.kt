@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,7 @@ class FeaturedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        observeFeaturedScreenState()
     }
 
     private fun initRecyclerView() {
@@ -69,8 +71,32 @@ class FeaturedFragment : Fragment() {
         viewModel.featuredPosts.observe(viewLifecycleOwner) { posts ->
             posts?.let {
                 featuredAdapter.submitList(posts)
+                viewModel.setFeaturedScreenState(posts)
             }
         }
+    }
+
+    private fun observeFeaturedScreenState() {
+        viewModel.featuredScreenState.observe(viewLifecycleOwner) { featuredState ->
+            when (featuredState) {
+                FeaturedState.SHOW_POSTS -> {
+                    showFeaturedShowPostsScreenState()
+                }
+                else -> {
+                    showFeaturedNoPostsScreenState()
+                }
+            }
+        }
+    }
+
+    private fun showFeaturedShowPostsScreenState() {
+        binding.list.isVisible = true
+        binding.noPostsLayout.root.isVisible = false
+    }
+
+    private fun showFeaturedNoPostsScreenState() {
+        binding.list.isVisible = false
+        binding.noPostsLayout.root.isVisible = true
     }
 
     override fun onDestroyView() {

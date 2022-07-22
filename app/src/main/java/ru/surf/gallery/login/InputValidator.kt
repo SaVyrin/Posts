@@ -13,7 +13,7 @@ abstract class InputValidator {
         fun getPasswordValidity(password: String): PasswordFieldStatus {
             return when {
                 password.isEmpty() -> PasswordFieldStatus.EMPTY
-                (password.length !in 6..255) -> PasswordFieldStatus.NOT_VALID // TODO проверить в ТЗ
+                (password.length !in 6..255) -> PasswordFieldStatus.NOT_VALID
                 else -> PasswordFieldStatus.VALID
             }
         }

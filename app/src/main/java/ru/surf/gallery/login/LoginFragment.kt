@@ -8,14 +8,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
 import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
-import kotlinx.coroutines.launch
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FargmentLoginBinding
@@ -28,11 +26,10 @@ class LoginFragment : Fragment() {
     private var _binding: FargmentLoginBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FargmentLoginBinding.inflate(inflater, container, false)
         getViewModelFactory()
         return binding.root
@@ -76,9 +73,7 @@ class LoginFragment : Fragment() {
 
     private fun setLoginButtonClickListener() {
         binding.btnLogin.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.logInUser()
-            }
+            viewModel.logInUser()
         }
     }
 
@@ -103,23 +98,15 @@ class LoginFragment : Fragment() {
             loginStatus?.let {
                 when (loginStatus) {
                     LoginStatus.LOGGED_IN -> {
-                        binding.btnLogin.isLoading = false
-                        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                        showLoggedInScreenState()
+                        navigateToMainScreen()
                     }
                     LoginStatus.ERROR -> {
-                        binding.btnLogin.isLoading = false
-                        binding.blockScreen.isVisible = false
-                        binding.login.error = " "
-                        binding.password.error = " "
-                        Snackbar.make(
-                            binding.root,
-                            R.string.wrong_login_or_password_error,
-                            Snackbar.LENGTH_LONG
-                        ).setAnchorView(binding.btnLogin).show()
+                        showErrorScreenState()
+                        showErrorSnackbar()
                     }
                     LoginStatus.IN_PROGRESS -> {
-                        binding.btnLogin.isLoading = true
-                        binding.blockScreen.isVisible = true
+                        showInProgressScreenState()
                     }
                     LoginStatus.NOT_LOGGED_IN -> {
                         // Do nothing
@@ -129,23 +116,64 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun showLoggedInScreenState() {
+        binding.btnLogin.isLoading = false
+
+    }
+
+    private fun navigateToMainScreen() {
+        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+    }
+
+    private fun showErrorScreenState() {
+        binding.btnLogin.isLoading = false
+        binding.blockScreen.isVisible = false
+        binding.login.error = " "
+        binding.password.error = " "
+    }
+
+    private fun showErrorSnackbar() {
+        Snackbar.make(
+            binding.root,
+            R.string.wrong_login_or_password_error,
+            Snackbar.LENGTH_LONG
+        ).setAnchorView(binding.btnLogin).show()
+    }
+
+    private fun showInProgressScreenState() {
+        binding.btnLogin.isLoading = true
+        binding.blockScreen.isVisible = true
+    }
+
     private fun observeLoginFieldStatus() {
         viewModel.loginFieldStatus.observe(viewLifecycleOwner) { loginFieldStatus ->
             loginFieldStatus?.let {
                 when (loginFieldStatus) {
                     LoginFieldStatus.EMPTY -> {
-                        binding.login.error = getString(R.string.empty_field_error)
+                        showLoginEmptyFieldError()
                     }
                     LoginFieldStatus.NOT_VALID -> {
-                        binding.login.error = getString(R.string.wrong_phone_number_format_error)
+                        showLoginInvalidInputError()
                     }
                     LoginFieldStatus.VALID -> {
-                        binding.login.error = null
-                        binding.login.isErrorEnabled = false
+                        showLoginValidState()
                     }
                 }
             }
         }
+    }
+
+    private fun showLoginEmptyFieldError() {
+        binding.login.error = getString(R.string.empty_field_error)
+    }
+
+    private fun showLoginInvalidInputError() {
+        binding.login.error = getString(R.string.wrong_phone_number_format_error)
+    }
+
+    private fun showLoginValidState() {
+        binding.login.error = null
+        binding.login.isErrorEnabled = false
     }
 
     private fun observePasswordFieldStatus() {
@@ -153,18 +181,30 @@ class LoginFragment : Fragment() {
             passwordFieldStatus?.let {
                 when (passwordFieldStatus) {
                     PasswordFieldStatus.EMPTY -> {
-                        binding.password.error = getString(R.string.empty_field_error)
+                        showPasswordEmptyFieldError()
                     }
                     PasswordFieldStatus.NOT_VALID -> {
-                        binding.password.error = getString(R.string.wrong_password_format_error)
+                        showPasswordInvalidInputError()
                     }
                     PasswordFieldStatus.VALID -> {
-                        binding.password.error = null
-                        binding.password.isErrorEnabled = false
+                        showPasswordValidState()
                     }
                 }
             }
         }
+    }
+
+    private fun showPasswordEmptyFieldError() {
+        binding.password.error = getString(R.string.empty_field_error)
+    }
+
+    private fun showPasswordInvalidInputError() {
+        binding.password.error = getString(R.string.wrong_password_format_error)
+    }
+
+    private fun showPasswordValidState() {
+        binding.password.error = null
+        binding.password.isErrorEnabled = false
     }
 
     override fun onDestroyView() {

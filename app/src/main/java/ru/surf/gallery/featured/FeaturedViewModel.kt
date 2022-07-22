@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDao
+import ru.surf.gallery.utils.createUpdatedPost
 
 class FeaturedViewModel(
     private val postDao: PostDao
@@ -14,8 +15,7 @@ class FeaturedViewModel(
 
     fun removePostFromFeatured(post: Post) {
         viewModelScope.launch {
-            post.inFeatured = false
-            postDao.update(post)
+            postDao.update(post.createUpdatedPost(false))
         }
     }
 }

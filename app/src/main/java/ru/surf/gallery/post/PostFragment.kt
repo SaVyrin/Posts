@@ -23,7 +23,7 @@ class PostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPostBinding.inflate(inflater, container, false)
         val postId = getPostIdFromArguments()
         getViewModelFactory(postId)
@@ -32,8 +32,8 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observePost()
         setBackArrowClickListener()
+        observePost()
     }
 
     private fun getPostIdFromArguments(): String {
@@ -44,6 +44,16 @@ class PostFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val postDao = PostDatabase.getInstance(application).postDao
         postViewModelFactory = PostViewModelFactory(postId, postDao)
+    }
+
+    private fun setBackArrowClickListener() {
+        binding.backArrow.setNavigationOnClickListener {
+            returnToPreviousScreen()
+        }
+    }
+
+    private fun returnToPreviousScreen() {
+        findNavController().popBackStack()
     }
 
     private fun observePost() {
@@ -57,9 +67,8 @@ class PostFragment : Fragment() {
         }
     }
 
-    private fun setBackArrowClickListener() {
-        binding.backArrowImage.setOnClickListener {
-            findNavController().popBackStack()
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

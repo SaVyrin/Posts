@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.surf.gallery.R
 import ru.surf.gallery.database.PostDatabase
+import ru.surf.gallery.login.LoginStatus
 
 class SplashFragment : Fragment() {
 
@@ -21,23 +22,14 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         getViewModelFactory()
-
-        viewModel.userToken.observe(viewLifecycleOwner) { token ->
-            token?.let {
-                 viewModel.setLoginStatus(it)
-            }
-        }
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            navigateToNextScreen()
-        }, 500) // TODO проверить сколько по тз
+        observeUserToken()
+        navigateToNextScreenWithDelay()
     }
 
     private fun getViewModelFactory() {
@@ -47,16 +39,28 @@ class SplashFragment : Fragment() {
         splashViewModelFactory = SplashViewModelFactory(userTokenDao)
     }
 
-    private fun navigateToNextScreen() {
-        val nextScreenDestination = getNextScreenDestination()
-        findNavController().navigate(nextScreenDestination)
+    private fun observeUserToken() {
+        viewModel.userToken.observe(viewLifecycleOwner) { token ->
+            token?.let {
+                viewModel.setLoginStatus(it)
+            }
+        }
     }
 
+    private fun navigateToNextScreenWithDelay() {
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                val nextScreenDestination = getNextScreenDestination()
+                findNavController().navigate(nextScreenDestination)
+            }, 800
+        ) // TODO проверить сколько по тз
+    }
+
+
     private fun getNextScreenDestination(): Int {
-        return if (viewModel.isLoggedIn.value == SplashViewModel.NOT_LOGGED_IN) {
-            R.id.action_splashFragment_to_loginFragment
-        } else {
-            R.id.action_splashFragment_to_mainFragment
+        return when (viewModel.logInStatus.value) {
+            LoginStatus.LOGGED_IN -> R.id.action_splashFragment_to_mainFragment
+            else -> R.id.action_splashFragment_to_loginFragment
         }
     }
 }

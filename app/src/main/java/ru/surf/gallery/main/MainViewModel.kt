@@ -10,7 +10,8 @@ import retrofit2.Response
 import ru.surf.gallery.database.*
 import ru.surf.gallery.rest.PostApi
 import ru.surf.gallery.rest.PostResponse
-import java.lang.Exception
+import ru.surf.gallery.utils.createUpdatedPost
+import ru.surf.gallery.utils.toPost
 
 class MainViewModel(
     private val userTokenDao: UserTokenDao,
@@ -20,10 +21,11 @@ class MainViewModel(
 
     val userTokenFromDao: LiveData<List<UserToken>> = userTokenDao.getAll()
     private var userToken = ""
-    val posts = postDao.getAll()
 
     private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
     val postsRequestStatus: LiveData<PostsRequestStatus> = mutablePostsRequestStatus
+
+    val posts = postDao.getAll()
 
     fun setUserToken(tokenFromDao: UserToken) {
         userToken = tokenFromDao.token
@@ -34,7 +36,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
-                getPostsFromRest()
+                getPostsFromServer()
             } catch (error: Throwable) {
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
             }
@@ -45,14 +47,14 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
-                getPostsFromRest()
+                getPostsFromServer()
             } catch (error: Throwable) {
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
             }
         }
     }
 
-    private suspend fun getPostsFromRest() {
+    private suspend fun getPostsFromServer() {
         val postsResponse = sendPostsRequest(userToken)
         when {
             postsResponse.code() == 401 -> {
@@ -96,24 +98,11 @@ class MainViewModel(
     }
 
     private suspend fun addToFeatured(post: Post) {
-        postDao.update(createUpdatedPost(true, post)) // TODO так сразу обновляется список
+        postDao.update(post.createUpdatedPost(true)) // TODO так сразу обновляется список
     }
 
     private suspend fun removeFromFeatured(post: Post) {
-        postDao.update(createUpdatedPost(false, post))
-    }
-
-    private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {
-        val currentTime = System.currentTimeMillis()
-        return Post(
-            post.id,
-            post.title,
-            post.content,
-            post.photoUrl,
-            post.publicationDate,
-            inFeatured,
-            currentTime
-        )
+        postDao.update(post.createUpdatedPost(false))
     }
 
     private suspend fun clearUserData() {

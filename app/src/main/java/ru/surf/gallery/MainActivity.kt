@@ -1,11 +1,9 @@
 package ru.surf.gallery
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,7 +20,21 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView3)
         bottomNavView.setupWithNavController(navController)
-        // TODO возможно из-за addOnDestinationChangedListener резкая смена экранов и запоминание menu табов в backstack
+        // TODO перенести в di
+        val options = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.navigation.ui.R.anim.nav_default_enter_anim)
+            .setExitAnim(androidx.navigation.ui.R.anim.nav_default_exit_anim)
+            .setPopEnterAnim(androidx.navigation.ui.R.anim.nav_default_pop_enter_anim)
+            .setPopExitAnim(androidx.navigation.ui.R.anim.nav_default_pop_exit_anim)
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+
+        bottomNavView.setOnItemSelectedListener { menuItem ->
+            navController.popBackStack(R.id.mainFragment, false)
+            navController.navigate(menuItem.itemId,null, options)
+            true
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.mainFragment -> bottomNavView.visibility = View.VISIBLE

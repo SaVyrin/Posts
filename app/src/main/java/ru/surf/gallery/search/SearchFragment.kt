@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.RecyclerView
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentSearchBinding
 import ru.surf.gallery.main.MainPostRecyclerViewAdapter
+import ru.surf.gallery.utils.hideKeyboard
+import ru.surf.gallery.utils.showKeyboard
 
 class SearchFragment : Fragment() {
 
@@ -26,7 +28,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         getViewModelFactory()
         return binding.root
@@ -34,9 +36,13 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setBackArrowClickListener()
         setSearchViewTextListener()
-        setRecyclerViewAdapter()
+        startSearch()
+        initRecyclerView()
+        addRecyclerViewOnScrollListener()
+
         observePostsFromDao()
         observeSearchStatus()
     }
@@ -48,41 +54,63 @@ class SearchFragment : Fragment() {
     }
 
     private fun setBackArrowClickListener() {
-        binding.backArrowImage.setOnClickListener {
-            findNavController().popBackStack()
+        binding.backArrow.setNavigationOnClickListener {
+            returnToMainScreen()
         }
     }
 
-    private fun setSearchViewTextListener() {
-        binding.searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String): Boolean {
-                    viewModel.findMatchingPosts(newText)
-                    return false
-                }
-
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    // task HERE
-                    return false
-                }
-
-            })
+    private fun returnToMainScreen() {
+        findNavController().popBackStack()
     }
 
-    private fun setRecyclerViewAdapter() {
+    private fun setSearchViewTextListener() {
+        binding.searchViewEt.doOnTextChanged { newText, _, _, _ ->
+            newText?.let {
+                viewModel.findMatchingPosts(newText.toString())
+            }
+        }
+    }
+
+    private fun startSearch() {
+        binding.searchViewEt.requestFocus()
+        binding.searchViewEt.showKeyboard()
+    }
+
+    private fun initRecyclerView() {
         val mainAdapter = MainPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                lifecycleScope.launch {
-                    viewModel.featuredIconClicked(post)
-                }
+                featuredIconClicked(post)
             },
             navigateClickListener = { post ->
-                val action = SearchFragmentDirections.actionSearchFragmentToPostFragment(post.id)
-                findNavController().navigate(action)
+                navigateToPost(post)
             }
         )
-        binding.showResults.list.adapter = mainAdapter
+        setRecyclerViewAdapter(mainAdapter)
         observePostsToShow(mainAdapter)
+    }
+
+    private fun addRecyclerViewOnScrollListener() {
+        binding.showResultsLayout.list.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                binding.searchViewEt.clearFocus()
+                binding.searchViewEt.hideKeyboard()
+            }
+        })
+    }
+
+    private fun featuredIconClicked(post: Post) {
+        viewModel.featuredIconClicked(post)
+    }
+
+    private fun navigateToPost(post: Post) {
+        val action = SearchFragmentDirections.actionSearchFragmentToPostFragment(post.id)
+        findNavController().navigate(action)
+    }
+
+    private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
+        binding.showResultsLayout.list.adapter = mainAdapter
     }
 
     private fun observePostsToShow(mainAdapter: MainPostRecyclerViewAdapter) {
@@ -106,22 +134,44 @@ class SearchFragment : Fragment() {
             searchStatus?.let {
                 when (searchStatus) {
                     SearchStatus.NOT_SEARCHING -> {
-                        binding.notSearching.root.isVisible = true
-                        binding.showResults.root.isVisible = false
-                        binding.noResults.root.isVisible = false
+                        showNotSearchingState()
                     }
                     SearchStatus.NO_RESULTS -> {
-                        binding.notSearching.root.isVisible = false
-                        binding.noResults.root.isVisible = true
-                        binding.showResults.root.isVisible = false
+                        showNoResultsSearchState()
                     }
                     SearchStatus.SHOW_RESULTS -> {
-                        binding.notSearching.root.isVisible = false
-                        binding.noResults.root.isVisible = false
-                        binding.showResults.root.isVisible = true
+                        showSuccessfulSearchState()
                     }
                 }
             }
         }
+    }
+
+    private fun showNotSearchingState() {
+        binding.notSearchingLayout.root.isVisible = true
+        binding.showResultsLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = false
+    }
+
+    private fun showNoResultsSearchState() {
+        binding.notSearchingLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = true
+        binding.showResultsLayout.root.isVisible = false
+    }
+
+    private fun showSuccessfulSearchState() {
+        binding.notSearchingLayout.root.isVisible = false
+        binding.noResultsLayout.root.isVisible = false
+        binding.showResultsLayout.root.isVisible = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.searchViewEt.hideKeyboard()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

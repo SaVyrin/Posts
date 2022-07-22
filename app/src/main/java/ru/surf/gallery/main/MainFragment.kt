@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.surf.gallery.R
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FragmentMainBinding
 
@@ -24,19 +25,20 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         getViewModelFactory()
-        // TODO добавить SwipeRefreshLayout
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setSearchClickListener()
-        setRecyclerViewAdapter()
+        initRecyclerView()
         setErrorLoadButtonClickListener()
         setRefreshLayoutListener()
+
         observeUserToken()
         observePostsRequestStatus()
     }
@@ -51,24 +53,48 @@ class MainFragment : Fragment() {
     }
 
     private fun setSearchClickListener() {
-        binding.imageView.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+        binding.search.setOnMenuItemClickListener {
+            navigateToSearchScreen()
+            true
         }
     }
 
-    private fun setRecyclerViewAdapter() {
+    private fun navigateToSearchScreen() {
+        findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+    }
+
+    private fun initRecyclerView() {
         val mainAdapter = MainPostRecyclerViewAdapter(
             featuredClickListener = { post ->
-                viewModel.featuredIconClicked(post)
-
+                featuredIconClicked(post)
             },
             navigateClickListener = { post ->
-                val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
-                findNavController().navigate(action)
+                navigateToPost(post)
             }
         )
-        binding.mainList.list.adapter = mainAdapter
+        setRecyclerViewAdapter(mainAdapter)
         observePosts(mainAdapter)
+    }
+
+    private fun featuredIconClicked(post: Post) {
+        viewModel.featuredIconClicked(post)
+    }
+
+    private fun navigateToPost(post: Post) {
+        val action = MainFragmentDirections.actionMainFragmentToPostFragment(post.id)
+        findNavController().navigate(action)
+    }
+
+    private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
+        binding.mainList.list.adapter = mainAdapter
+    }
+
+    private fun observePosts(mainAdapter: MainPostRecyclerViewAdapter) {
+        viewModel.posts.observe(viewLifecycleOwner) { posts ->
+            posts?.let {
+                mainAdapter.submitList(posts)
+            }
+        }
     }
 
     private fun setErrorLoadButtonClickListener() {
@@ -79,10 +105,12 @@ class MainFragment : Fragment() {
 
     private fun setRefreshLayoutListener() {
         binding.mainList.swipeRefreshLayout.setOnRefreshListener {
-            // TODO добавить включение и выключение, когда список пустой
-            // TODO добавить включение и выключение кнопки поиска, когда список пустой
-            viewModel.refreshPosts()
+            refreshPosts()
         }
+    }
+
+    private fun refreshPosts() {
+        viewModel.refreshPosts()
     }
 
     private fun observeUserToken() {
@@ -101,39 +129,20 @@ class MainFragment : Fragment() {
             postsRequest?.let {
                 when (postsRequest) {
                     PostsRequestStatus.LOADING -> {
-                        binding.mainList.root.isVisible = false
-                        binding.imageView.isVisible = false
-                        binding.mainLoader.root.isVisible = true
-                        binding.mainErrorLoad.root.isVisible = false
+                        showLoadingScreenState()
                     }
                     PostsRequestStatus.SUCCESS -> {
-                        binding.mainList.root.isVisible = true
-                        binding.imageView.isVisible = true
-                        binding.mainLoader.root.isVisible = false
-                        binding.mainErrorLoad.root.isVisible = false
-                        binding.mainList.swipeRefreshLayout.isRefreshing = false
+                        showSuccessScreenState()
                     }
                     PostsRequestStatus.ERROR_LOAD -> {
-                        binding.mainList.root.isVisible = false
-                        binding.imageView.isVisible = false
-                        binding.mainLoader.root.isVisible = false
-                        binding.mainErrorLoad.root.isVisible = true
+                        showErrorLoadScreenState()
                     }
                     PostsRequestStatus.ERROR_REFRESH -> {
-                        binding.mainList.root.isVisible = true
-                        binding.imageView.isVisible = true
-                        binding.mainLoader.root.isVisible = false
-                        binding.mainErrorLoad.root.isVisible = false
-                        binding.mainList.swipeRefreshLayout.isRefreshing = false
-                        Snackbar.make(
-                            binding.root,
-                            R.string.main_screen_reload_error,
-                            Snackbar.LENGTH_LONG
-                        ).setAnchorView(requireActivity().findViewById(R.id.bottomNavigationView3))
-                            .show()
+                        showErrorRefreshScreenState()
+                        showErrorRefreshSnackbar()
                     }
                     PostsRequestStatus.UNAUTHORIZED -> {
-                        findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
+                        navigateToLoginScreen()
                     }
                     PostsRequestStatus.REFRESHING -> {
                         // DO nothing
@@ -143,12 +152,51 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun observePosts(mainAdapter: MainPostRecyclerViewAdapter) {
-        viewModel.posts.observe(viewLifecycleOwner) { posts ->
-            posts?.let {
-                mainAdapter.submitList(posts)
-            }
-        }
+    private fun showLoadingScreenState() {
+        binding.mainList.root.isVisible = false
+        binding.search.isVisible = false
+        binding.mainLoader.root.isVisible = true
+        binding.mainErrorLoad.root.isVisible = false
+    }
+
+    private fun showSuccessScreenState() {
+        binding.mainList.root.isVisible = true
+        binding.search.isVisible = true
+        binding.mainLoader.root.isVisible = false
+        binding.mainErrorLoad.root.isVisible = false
+        binding.mainList.swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun showErrorLoadScreenState() {
+        binding.mainList.root.isVisible = false
+        binding.search.isVisible = false
+        binding.mainLoader.root.isVisible = false
+        binding.mainErrorLoad.root.isVisible = true
+    }
+
+    private fun showErrorRefreshScreenState() {
+        binding.mainList.root.isVisible = true
+        binding.search.isVisible = true
+        binding.mainLoader.root.isVisible = false
+        binding.mainErrorLoad.root.isVisible = false
+        binding.mainList.swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun showErrorRefreshSnackbar() {
+        Snackbar
+            .make(
+                binding.root,
+                R.string.main_screen_reload_error,
+                Snackbar.LENGTH_LONG
+            )
+            .setAnchorView(
+                requireActivity().findViewById(R.id.bottomNavigationView3)
+            )
+            .show()
+    }
+
+    private fun navigateToLoginScreen() {
+        findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
     }
 
     override fun onDestroyView() {

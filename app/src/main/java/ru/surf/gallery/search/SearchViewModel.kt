@@ -3,8 +3,11 @@ package ru.surf.gallery.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDao
+import ru.surf.gallery.utils.createUpdatedPost
 
 class SearchViewModel(
     private val postDao: PostDao
@@ -37,14 +40,9 @@ class SearchViewModel(
     }
 
     private fun getMatchingPosts(text: String): List<Post> {
-        val newPostsList = mutableListOf<Post>()
-        for (post in postsToMatch) {
-            if (text.lowercase() in post.title.lowercase()) {
-                // TODO узнать, нужно ли искать без учёта регистра
-                newPostsList.add(post)
-            }
+        return postsToMatch.filter {
+            text.lowercase() in it.title.lowercase()
         }
-        return newPostsList
     }
 
     private fun setSearchStatus(text: String, newPostsList: List<Post>) {
@@ -55,31 +53,20 @@ class SearchViewModel(
         }
     }
 
-    suspend fun featuredIconClicked(post: Post) {
-        when (post.inFeatured) {
-            true -> removeFromFeatured(post)
-            false -> addToFeatured(post)
+    fun featuredIconClicked(post: Post) {
+        viewModelScope.launch {
+            when (post.inFeatured) {
+                true -> removeFromFeatured(post)
+                false -> addToFeatured(post)
+            }
         }
     }
 
     private suspend fun addToFeatured(post: Post) {
-        postDao.update(createUpdatedPost(true, post))
+        postDao.update(post.createUpdatedPost(true))
     }
 
     private suspend fun removeFromFeatured(post: Post) {
-        postDao.update(createUpdatedPost(false, post))
-    }
-
-    private fun createUpdatedPost(inFeatured: Boolean, post: Post): Post {
-        val currentTime = System.currentTimeMillis()
-        return Post(
-            post.id,
-            post.title,
-            post.content,
-            post.photoUrl,
-            post.publicationDate,
-            inFeatured,
-            currentTime
-        )
+        postDao.update(post.createUpdatedPost(false))
     }
 }

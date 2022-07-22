@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:inputType="phone"
-            android:nextFocusDown="@id/password"
-            android:singleLine="true" />
+            android:maxLines="1"
+            android:nextFocusDown="@id/password" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +64,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLength="255"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

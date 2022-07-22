@@ -3,69 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    tools:context=".featured.FeaturedFragment">
 
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="0dp"
-        android:layout_height="358dp"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/featured_title"
+        android:textAppearance="@style/Text.SemiBold.24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/featured_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="9dp"
-        android:src="@drawable/ic_heart_fill"
-        app:layout_constraintEnd_toEndOf="@+id/image"
-        app:layout_constraintTop_toTopOf="@+id/image" />
-
-    <TextView
-        android:id="@+id/name"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="ru.surf.gallery.featured.FeaturedFragment"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Первый день в Surf"
-        android:textAppearance="@style/Text.Medium.16"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image" />
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="12.05.2022"
-        android:textAppearance="@style/Text.Medium.10"
-        android:textColor="@color/gray_600"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image" />
-
-
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:singleLine="true"
-        android:text="Сегодня был мой первый день в студии Surf..."
-        android:textAppearance="@style/Text.Regular.12"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="16dp"
+        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:listitem="@layout/fragment_featured_list_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

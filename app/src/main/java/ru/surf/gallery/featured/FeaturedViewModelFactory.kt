@@ -7,12 +7,11 @@ import ru.surf.gallery.database.PostDao
 
 class FeaturedViewModelFactory(
     private val postDao: PostDao
-) :
-    ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FeaturedFragment::class.java)) {
+        if (modelClass.isAssignableFrom(FeaturedViewModel::class.java)) {
             return FeaturedViewModel(postDao) as T
         }
-        return FeaturedViewModel(postDao) as T  // TODO почему-то заходит сюда
+        throw IllegalArgumentException("Unknown ViewModel")
     }
 }

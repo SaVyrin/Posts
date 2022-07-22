@@ -11,7 +11,7 @@ interface NetworkApi {
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
-    ): LoginResponse
+    ): Response<LoginResponse>
 
     @POST("auth/logout")
     suspend fun logout(

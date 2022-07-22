@@ -4,5 +4,6 @@ enum class LoginStatus {
     NOT_LOGGED_IN,
     IN_PROGRESS,
     LOGGED_IN,
-    ERROR
+    ERROR_INTERNET,
+    ERROR_WRONG_DATA
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import ru.surf.gallery.database.User
 import ru.surf.gallery.database.UserDao
 import ru.surf.gallery.database.UserToken
@@ -51,12 +52,23 @@ class LoginViewModel @Inject constructor(
                     mutableLoginStatus.value = LoginStatus.IN_PROGRESS
 
                     val loginResponse = sendLoginRequest()
-                    addTokenToDb(loginResponse.token.toUserToken())
-                    addUserToDb(loginResponse.userInfo.toUser())
-
-                    mutableLoginStatus.value = LoginStatus.LOGGED_IN
+                    when {
+                        loginResponse.code() == 400 -> {
+                            mutableLoginStatus.value = LoginStatus.ERROR_WRONG_DATA
+                        }
+                        loginResponse.isSuccessful -> {
+                            loginResponse.body()?.let {
+                                addTokenToDb(it.token.toUserToken())
+                                addUserToDb(it.userInfo.toUser())
+                                mutableLoginStatus.value = LoginStatus.LOGGED_IN
+                            }
+                        }
+                        else -> {
+                            mutableLoginStatus.value = LoginStatus.ERROR_INTERNET
+                        }
+                    }
                 } catch (error: Throwable) {
-                    mutableLoginStatus.value = LoginStatus.ERROR
+                    mutableLoginStatus.value = LoginStatus.ERROR_INTERNET
                 }
             }
         }
@@ -71,7 +83,7 @@ class LoginViewModel @Inject constructor(
         return InputValidator.fieldsValid(loginValidity, passwordValidity)
     }
 
-    private suspend fun sendLoginRequest(): LoginResponse {
+    private suspend fun sendLoginRequest(): Response<LoginResponse> {
         return networkApi.login(LoginRequest("+7$login", password))
     }
 

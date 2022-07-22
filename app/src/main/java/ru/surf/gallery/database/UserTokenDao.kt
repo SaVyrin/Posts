@@ -2,11 +2,11 @@ package ru.surf.gallery.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface UserTokenDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE) // TODO убрать onConflict
+    @Insert(onConflict = REPLACE)
     suspend fun insert(token: UserToken)
 
     @Update
@@ -15,14 +15,9 @@ interface UserTokenDao {
     @Delete
     suspend fun delete(token: UserToken)
 
-    @Query("SELECT * FROM token_table")
-    fun get(): LiveData<List<UserToken>>
-
-    @Query("SELECT * FROM token_table")
-    fun getAll(): LiveData<List<UserToken>>
+    @Query("SELECT * FROM token_table LIMIT 1")
+    fun get(): LiveData<UserToken>
 
     @Query("DELETE FROM token_table")
     suspend fun deleteAll()
-
-    // TODO сделать получение только 1 токена
 }

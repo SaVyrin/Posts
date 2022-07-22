@@ -14,14 +14,14 @@ import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
 import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.R
-import ru.surf.gallery.database.PostDatabase
 import ru.surf.gallery.databinding.FargmentLoginBinding
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    private lateinit var loginViewModelFactory: LoginViewModelFactory
-    private val viewModel: LoginViewModel by viewModels { loginViewModelFactory }
+    private val viewModel: LoginViewModel by viewModels()
 
     private var _binding: FargmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +31,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FargmentLoginBinding.inflate(inflater, container, false)
-        getViewModelFactory()
         return binding.root
     }
 
@@ -45,14 +44,6 @@ class LoginFragment : Fragment() {
         observeLoginStatus()
         observeLoginFieldStatus()
         observePasswordFieldStatus()
-    }
-
-    private fun getViewModelFactory() {
-        val application = requireNotNull(this.activity).application
-        val database = PostDatabase.getInstance(application)
-        val userTokenDao = database.userTokenDao
-        val userDao = database.userDao
-        loginViewModelFactory = LoginViewModelFactory(userTokenDao, userDao)
     }
 
     private fun initLoginMask() {

@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
-import ru.surf.gallery.database.PostDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import ru.surf.gallery.database.PostDao
 import ru.surf.gallery.databinding.FragmentPostBinding
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class PostFragment : Fragment() {
 
+    @Inject lateinit var postDao: PostDao
     private lateinit var postViewModelFactory: PostViewModelFactory
     private val viewModel: PostViewModel by viewModels { postViewModelFactory }
 
@@ -41,8 +44,6 @@ class PostFragment : Fragment() {
     }
 
     private fun getViewModelFactory(postId: String) {
-        val application = requireNotNull(this.activity).application
-        val postDao = PostDatabase.getInstance(application).postDao
         postViewModelFactory = PostViewModelFactory(postId, postDao)
     }
 

@@ -5,21 +5,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import ru.surf.gallery.database.*
-import ru.surf.gallery.rest.PostApi
+import ru.surf.gallery.rest.NetworkApi
 import ru.surf.gallery.rest.PostResponse
 import ru.surf.gallery.utils.createUpdatedPost
 import ru.surf.gallery.utils.toPost
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val userTokenDao: UserTokenDao,
     private val userDao: UserDao,
-    private val postDao: PostDao
+    private val postDao: PostDao,
+    private val networkApi: NetworkApi
 ) : ViewModel() {
 
-    val userTokenFromDao: LiveData<List<UserToken>> = userTokenDao.getAll()
+    val userTokenFromDao = userTokenDao.get()
     private var userToken = ""
 
     private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
@@ -67,9 +71,7 @@ class MainViewModel(
             postsResponse.isSuccessful -> {
                 postsResponse.body()?.let {
                     addPostsToDb(it)
-                    Log.e("Request", "$postsResponse")
                     mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
-                    // TODO добавить обработку ошибок
                 }
             }
             else -> {
@@ -79,8 +81,7 @@ class MainViewModel(
     }
 
     private suspend fun sendPostsRequest(userToken: String): Response<List<PostResponse>> {
-        val postApi = PostApi.create()
-        return postApi.getPosts("Token $userToken")
+        return networkApi.getPosts("Token $userToken")
     }
 
     private suspend fun addPostsToDb(postsReq: List<PostResponse>) {

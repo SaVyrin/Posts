@@ -1,17 +1,15 @@
 package ru.surf.gallery.main
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
-import com.bumptech.glide.Glide
 import ru.surf.gallery.R
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentMainListItemBinding
 import ru.surf.gallery.utils.PostDiffItemCallback
+import ru.surf.gallery.utils.getSmallPlaceholder
 
 class MainPostRecyclerViewAdapter(
     private val featuredClickListener: (post: Post) -> Unit,
@@ -43,18 +41,48 @@ class MainPostRecyclerViewAdapter(
             featuredClickListener: (post: Post) -> Unit,
             navigateClickListener: (post: Post) -> Unit
         ) {
-            val draw = CircularProgressDrawable(binding.root.context) // TODO перенести в di
-            draw.strokeWidth = 5f
-            draw.centerRadius = 30f
-            draw.start()
-            binding.tvPostName.text = item.title
-            // TODO добавить всем картинкам в проекте Glide
-            Glide.with(binding.root).load(Uri.parse(item.photoUrl)).placeholder(draw).into(binding.postImage)
-            when (item.inFeatured) {
-                true -> binding.featuredImage.load(R.drawable.ic_heart_fill)
-                false -> binding.featuredImage.load(R.drawable.ic_heart_line)
+            setPostTitle(item)
+            setPostImage(item)
+            setFeaturedImage(item)
+            setFeaturedClickListener(item, featuredClickListener)
+            setNavigateClickListener(item, navigateClickListener)
+        }
+
+        private fun setPostTitle(item: Post) {
+            binding.postTitleTv.text = item.title
+        }
+
+        private fun setPostImage(item: Post) {
+            val placeholder = getSmallPlaceholder(binding.root.context)
+            binding.postImage.load(item.photoUrl) {
+                crossfade(true)
+                placeholder(placeholder)
             }
+        }
+
+        private fun setFeaturedImage(item: Post) {
+            val featuredImageId = getCurrentFeaturedImageId(item)
+            binding.featuredImage.load(featuredImageId)
+        }
+
+        private fun getCurrentFeaturedImageId(item: Post): Int {
+            return when (item.inFeatured) {
+                true -> R.drawable.ic_heart_fill
+                false -> R.drawable.ic_heart_line
+            }
+        }
+
+        private fun setFeaturedClickListener(
+            item: Post,
+            featuredClickListener: (post: Post) -> Unit
+        ) {
             binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+        }
+
+        private fun setNavigateClickListener(
+            item: Post,
+            navigateClickListener: (post: Post) -> Unit
+        ) {
             binding.root.setOnClickListener { navigateClickListener(item) }
         }
     }

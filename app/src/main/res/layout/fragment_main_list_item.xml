@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/post_image" />
 
     <TextView
-        android:id="@+id/tv_post_name"
+        android:id="@+id/post_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

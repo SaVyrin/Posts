@@ -8,6 +8,7 @@ import coil.load
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.databinding.FragmentFeaturedListItemBinding
 import ru.surf.gallery.utils.PostDiffItemCallback
+import ru.surf.gallery.utils.getLargePlaceholder
 
 class FeaturedPostRecyclerViewAdapter(
     private val featuredClickListener: (post: Post) -> Unit,
@@ -39,11 +40,45 @@ class FeaturedPostRecyclerViewAdapter(
             featuredClickListener: (post: Post) -> Unit,
             navigateClickListener: (post: Post) -> Unit
         ) {
-            binding.nameTv.text = item.title
-            binding.content.text = item.content
-            binding.image.load(item.photoUrl)
-            binding.date.text = item.publicationDate
+            setPostTitle(item)
+            setPostImage(item)
+            setPostContent(item)
+            setPostPublicationDate(item)
+            setFeaturedClickListener(item, featuredClickListener)
+            setNavigateClickListener(item, navigateClickListener)
+        }
+
+        private fun setPostTitle(item: Post) {
+            binding.postTitleTv.text = item.title
+        }
+
+        private fun setPostImage(item: Post) {
+            val placeholder = getLargePlaceholder(binding.root.context)
+            binding.postImage.load(item.photoUrl) {
+                crossfade(true)
+                placeholder(placeholder)
+            }
+        }
+
+        private fun setPostContent(item: Post) {
+            binding.postContentTv.text = item.content
+        }
+
+        private fun setPostPublicationDate(item: Post) {
+            binding.postPublicationDateTv.text = item.publicationDate
+        }
+
+        private fun setFeaturedClickListener(
+            item: Post,
+            featuredClickListener: (post: Post) -> Unit
+        ) {
             binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+        }
+
+        private fun setNavigateClickListener(
+            item: Post,
+            navigateClickListener: (post: Post) -> Unit
+        ) {
             binding.root.setOnClickListener { navigateClickListener(item) }
         }
     }

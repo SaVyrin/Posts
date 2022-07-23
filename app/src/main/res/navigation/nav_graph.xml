@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="ru.surf.gallery.login.LoginFragment"
+        android:name="ru.surf.gallery.ui.login.LoginFragment"
         android:label="fargment_login"
         tools:layout="@layout/fargment_login">
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="ru.surf.gallery.main.MainFragment"
+        android:name="ru.surf.gallery.ui.main.MainFragment"
         android:label="fragment_main_list"
         tools:layout="@layout/fragment_main">
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/featuredFragment"
-        android:name="ru.surf.gallery.featured.FeaturedFragment"
+        android:name="ru.surf.gallery.ui.featured.FeaturedFragment"
         android:label="fragment_featured_list"
         tools:layout="@layout/fragment_featured">
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/postFragment"
-        android:name="ru.surf.gallery.post.PostFragment"
+        android:name="ru.surf.gallery.ui.post.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post">
         <argument
@@ -73,7 +73,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentProfile"
-        android:name="ru.surf.gallery.profile.ProfileFragment"
+        android:name="ru.surf.gallery.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="ru.surf.gallery.splash.SplashFragment"
+        android:name="ru.surf.gallery.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="ru.surf.gallery.search.SearchFragment"
+        android:name="ru.surf.gallery.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action

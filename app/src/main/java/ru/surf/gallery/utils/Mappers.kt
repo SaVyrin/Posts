@@ -1,10 +1,10 @@
 package ru.surf.gallery.utils
 
-import ru.surf.gallery.database.Post
-import ru.surf.gallery.database.User
-import ru.surf.gallery.database.UserToken
-import ru.surf.gallery.rest.PostResponse
-import ru.surf.gallery.rest.UserResponse
+import ru.surf.gallery.data.database.Post
+import ru.surf.gallery.data.database.User
+import ru.surf.gallery.data.database.UserToken
+import ru.surf.gallery.data.network.PostResponse
+import ru.surf.gallery.data.network.UserResponse
 import java.text.SimpleDateFormat
 import java.util.*
 

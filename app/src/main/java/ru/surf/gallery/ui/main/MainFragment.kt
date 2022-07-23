@@ -77,7 +77,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
-        binding.mainList.list.adapter = mainAdapter
+        binding.mainListLayout.mainList.adapter = mainAdapter
     }
 
     private fun observePosts(mainAdapter: MainPostRecyclerViewAdapter) {
@@ -89,13 +89,13 @@ class MainFragment : Fragment() {
     }
 
     private fun setErrorLoadButtonClickListener() {
-        binding.mainErrorLoad.btnLoad.setOnClickListener {
+        binding.mainErrorLoadLayout.loadBtn.setOnClickListener {
             viewModel.getPosts()
         }
     }
 
     private fun setRefreshLayoutListener() {
-        binding.mainList.swipeRefreshLayout.setOnRefreshListener {
+        binding.mainListLayout.swipeRefreshLayout.setOnRefreshListener {
             refreshPosts()
         }
     }
@@ -141,33 +141,33 @@ class MainFragment : Fragment() {
     }
 
     private fun showLoadingScreenState() {
-        binding.mainList.root.isVisible = false
+        binding.mainListLayout.root.isVisible = false
         binding.search.isVisible = false
-        binding.mainLoader.root.isVisible = true
-        binding.mainErrorLoad.root.isVisible = false
+        binding.mainLoaderLayout.root.isVisible = true
+        binding.mainErrorLoadLayout.root.isVisible = false
     }
 
     private fun showSuccessScreenState() {
-        binding.mainList.root.isVisible = true
+        binding.mainListLayout.root.isVisible = true
         binding.search.isVisible = true
-        binding.mainLoader.root.isVisible = false
-        binding.mainErrorLoad.root.isVisible = false
-        binding.mainList.swipeRefreshLayout.isRefreshing = false
+        binding.mainLoaderLayout.root.isVisible = false
+        binding.mainErrorLoadLayout.root.isVisible = false
+        binding.mainListLayout.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun showErrorLoadScreenState() {
-        binding.mainList.root.isVisible = false
+        binding.mainListLayout.root.isVisible = false
         binding.search.isVisible = false
-        binding.mainLoader.root.isVisible = false
-        binding.mainErrorLoad.root.isVisible = true
+        binding.mainLoaderLayout.root.isVisible = false
+        binding.mainErrorLoadLayout.root.isVisible = true
     }
 
     private fun showErrorRefreshScreenState() {
-        binding.mainList.root.isVisible = true
+        binding.mainListLayout.root.isVisible = true
         binding.search.isVisible = true
-        binding.mainLoader.root.isVisible = false
-        binding.mainErrorLoad.root.isVisible = false
-        binding.mainList.swipeRefreshLayout.isRefreshing = false
+        binding.mainLoaderLayout.root.isVisible = false
+        binding.mainErrorLoadLayout.root.isVisible = false
+        binding.mainListLayout.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun showErrorRefreshSnackbar() {

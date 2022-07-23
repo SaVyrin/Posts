@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import coil.load
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.R
+import ru.surf.gallery.database.User
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 import ru.surf.gallery.utils.formatPhone
@@ -59,13 +61,60 @@ class ProfileFragment : Fragment() {
     private fun observeUser() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
-                binding.avatar.load(user.avatar)
-                binding.name.text = "${user.firstName} ${user.lastName}"
-                binding.about.text = user.about.withQuotation()
-                binding.phone.text = user.phone.formatPhone()
-                binding.city.text = user.city
-                binding.email.text = user.email
+                setAvatar(user)
+                setName(user)
+                setAbout(user)
+                setPhone(user)
+                setCity(user)
+                setEmail(user)
             }
+        }
+    }
+
+    private fun setAvatar(user: User) {
+        when (user.avatar.isEmpty()) {
+            true -> {
+                Glide.with(binding.root.context).load(R.drawable.ic_default_avatar)
+                    .into(binding.avatarImage)
+            }
+            false -> {
+                Glide.with(binding.root.context).load(user.avatar).into(binding.avatarImage)
+            }
+        }
+    }
+
+    private fun setName(user: User) {
+        when (user.firstName.isEmpty() && user.lastName.isEmpty()) {
+            true -> binding.fullNameTv.text = getString(R.string.profile_screen_no_name_text)
+            false -> binding.fullNameTv.text = "${user.firstName} ${user.lastName}"
+        }
+    }
+
+    private fun setAbout(user: User) {
+        when (user.about.isEmpty()) {
+            true -> binding.aboutTv.isVisible = false
+            false -> binding.aboutTv.text = user.about.withQuotation()
+        }
+    }
+
+    private fun setPhone(user: User) {
+        when (user.phone.isEmpty()) {
+            true -> binding.phoneGroup.isVisible = false
+            false -> binding.phoneTv.text = user.phone.formatPhone()
+        }
+    }
+
+    private fun setCity(user: User) {
+        when (user.city.isEmpty()) {
+            true -> binding.cityGroup.isVisible = false
+            false -> binding.cityTv.text = user.city
+        }
+    }
+
+    private fun setEmail(user: User) {
+        when (user.email.isEmpty()) {
+            true -> binding.emailGroup.isVisible = false
+            false -> binding.emailTv.text = user.email
         }
     }
 

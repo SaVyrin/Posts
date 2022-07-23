@@ -3,15 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/bg_search_view_rounded.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/bottom_nav_color_selector.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/bottom_nav_icon_color_selector.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/box_stroke_color_selector.xml" value="0.1575" />
+        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_default_avatar.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_field_search.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_heart_fill.xml" value="0.2265" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_heart_line.xml" value="0.2265" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_hide_password_false.xml" value="0.2265" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_hide_password_true.xml" value="0.2265" />
+        <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_home_line_menu.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2265" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_sad_face.xml" value="0.1675" />
         <entry key="..\:/Users/proto/AndroidStudioProjects/Gallery/app/src/main/res/drawable/ic_surf_edu.xml" value="0.2265" />

@@ -60,7 +60,7 @@ class PostFragment : Fragment() {
     private fun observePost() {
         viewModel.post.observe(viewLifecycleOwner) { post ->
             post?.let {
-                binding.name.text = post.title
+                binding.nameTv.text = post.title
                 binding.content.text = post.content
                 binding.date.text = post.publicationDate
                 binding.image.load(post.photoUrl)

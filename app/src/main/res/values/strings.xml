@@ -36,6 +36,7 @@
     <string name="search_screen_default_text">Введите ваш запрос</string>
     <string name="search_screen_no_result_text">По этому запросу нет результатов, попробуйте другой запрос</string>
 
+    <string name="profile_screen_no_name_text">Аноним</string>
     <string name="profile_screen_town">Город</string>
     <string name="profile_screen_phone_number">Телефон</string>
     <string name="profile_screen_email">Почта</string>

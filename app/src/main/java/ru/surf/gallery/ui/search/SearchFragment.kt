@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setSearchViewTextListener() {
-        binding.searchViewEt.doOnTextChanged { newText, _, _, _ ->
+        binding.searchEdt.doOnTextChanged { newText, _, _, _ ->
             newText?.let {
                 viewModel.findMatchingPosts(newText.toString())
             }
@@ -65,8 +65,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun startSearch() {
-        binding.searchViewEt.requestFocus()
-        binding.searchViewEt.showKeyboard()
+        binding.searchEdt.requestFocus()
+        binding.searchEdt.showKeyboard()
     }
 
     private fun initRecyclerView() {
@@ -83,12 +83,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun addRecyclerViewOnScrollListener() {
-        binding.showResultsLayout.list.addOnScrollListener(object :
+        binding.showResultsLayout.searchList.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                binding.searchViewEt.clearFocus()
-                binding.searchViewEt.hideKeyboard()
+                binding.searchEdt.clearFocus()
+                binding.searchEdt.hideKeyboard()
             }
         })
     }
@@ -103,7 +103,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter(mainAdapter: MainPostRecyclerViewAdapter) {
-        binding.showResultsLayout.list.adapter = mainAdapter
+        binding.showResultsLayout.searchList.adapter = mainAdapter
     }
 
     private fun observePostsToShow(mainAdapter: MainPostRecyclerViewAdapter) {
@@ -160,7 +160,7 @@ class SearchFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        binding.searchViewEt.hideKeyboard()
+        binding.searchEdt.hideKeyboard()
     }
 
     override fun onDestroy() {

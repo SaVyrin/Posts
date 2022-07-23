@@ -23,8 +23,8 @@
     <string name="login_no_internet_error">Отсутствует соединение с интернетом</string>
     <string name="can_not_logout_error">Не удалось выйти, попробуйте еще раз</string>
 
-    <string name="main_screen_reload_error">Отсутствует интернет-соединение  Попробуйте позже</string>
-    <string name="main_screen_load_error">Не удалось загрузить ленту \n Обновите экран или попробуйте позже</string>
+    <string name="main_screen_reload_error">Отсутствует интернет-соединение\nПопробуйте позже</string>
+    <string name="main_screen_load_error">Не удалось загрузить ленту\nОбновите экран или попробуйте позже</string>
 
     <string name="featured_screen_no_posts">В избранном пусто</string>
 

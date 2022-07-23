@@ -15,17 +15,19 @@
         tools:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/featured_image"
+        android:id="@+id/featured_heart_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="9dp"
         android:src="@drawable/ic_heart_fill"
         app:layout_constraintEnd_toEndOf="@+id/post_image"
-        app:layout_constraintTop_toTopOf="@+id/post_image" />
+        app:layout_constraintTop_toTopOf="@+id/post_image"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/post_title_tv"

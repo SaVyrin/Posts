@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView3)
+        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
         bottomNavView.setupWithNavController(navController)
 
         bottomNavView.setOnItemSelectedListener { menuItem ->

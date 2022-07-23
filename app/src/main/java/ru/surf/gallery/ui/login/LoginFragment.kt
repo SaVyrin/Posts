@@ -48,7 +48,7 @@ class LoginFragment : Fragment() {
 
     private fun initLoginMask() {
         installOn(
-            binding.etLogin,
+            binding.loginEdt,
             PHONE_MASK,
             object : MaskedTextChangedListener.ValueListener {
                 override fun onTextChanged(
@@ -63,13 +63,13 @@ class LoginFragment : Fragment() {
     }
 
     private fun setLoginButtonClickListener() {
-        binding.btnLogin.setOnClickListener {
+        binding.loginBtn.setOnClickListener {
             viewModel.logInUser()
         }
     }
 
     private fun observePasswordFieldChange() {
-        binding.etPassword.doOnTextChanged { password, _, _, _ ->
+        binding.passwordEdt.doOnTextChanged { password, _, _, _ ->
             password?.let {
                 viewModel.setPassword(password.toString())
                 setPasswordFieldEndIconMode(password.toString())
@@ -79,8 +79,8 @@ class LoginFragment : Fragment() {
 
     private fun setPasswordFieldEndIconMode(password: String) {
         when (password.isNotEmpty()) {
-            true -> binding.password.endIconMode = END_ICON_PASSWORD_TOGGLE
-            else -> binding.password.endIconMode = END_ICON_NONE
+            true -> binding.passwordTil.endIconMode = END_ICON_PASSWORD_TOGGLE
+            else -> binding.passwordTil.endIconMode = END_ICON_NONE
         }
     }
 
@@ -112,7 +112,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoggedInScreenState() {
-        binding.btnLogin.isLoading = false
+        binding.loginBtn.isLoading = false
     }
 
     private fun navigateToMainScreen() {
@@ -120,14 +120,14 @@ class LoginFragment : Fragment() {
     }
 
     private fun showErrorWrongDataScreenState() {
-        binding.btnLogin.isLoading = false
+        binding.loginBtn.isLoading = false
         binding.blockScreen.isVisible = false
-        binding.login.error = " "
-        binding.password.error = " "
+        binding.loginTil.error = " "
+        binding.passwordTil.error = " "
     }
 
     private fun showErrorNoInternetScreenState() {
-        binding.btnLogin.isLoading = false
+        binding.loginBtn.isLoading = false
         binding.blockScreen.isVisible = false
     }
 
@@ -136,11 +136,11 @@ class LoginFragment : Fragment() {
             binding.root,
             errorTextId,
             Snackbar.LENGTH_LONG
-        ).setAnchorView(binding.btnLogin).show()
+        ).setAnchorView(binding.loginBtn).show()
     }
 
     private fun showInProgressScreenState() {
-        binding.btnLogin.isLoading = true
+        binding.loginBtn.isLoading = true
         binding.blockScreen.isVisible = true
     }
 
@@ -163,16 +163,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoginEmptyFieldError() {
-        binding.login.error = getString(R.string.empty_field_error)
+        binding.loginTil.error = getString(R.string.empty_field_error)
     }
 
     private fun showLoginInvalidInputError() {
-        binding.login.error = getString(R.string.wrong_phone_number_format_error)
+        binding.loginTil.error = getString(R.string.wrong_phone_number_format_error)
     }
 
     private fun showLoginValidState() {
-        binding.login.error = null
-        binding.login.isErrorEnabled = false
+        binding.loginTil.error = null
+        binding.loginTil.isErrorEnabled = false
     }
 
     private fun observePasswordFieldStatus() {
@@ -194,16 +194,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun showPasswordEmptyFieldError() {
-        binding.password.error = getString(R.string.empty_field_error)
+        binding.passwordTil.error = getString(R.string.empty_field_error)
     }
 
     private fun showPasswordInvalidInputError() {
-        binding.password.error = getString(R.string.wrong_password_format_error)
+        binding.passwordTil.error = getString(R.string.wrong_password_format_error)
     }
 
     private fun showPasswordValidState() {
-        binding.password.error = null
-        binding.password.isErrorEnabled = false
+        binding.passwordTil.error = null
+        binding.passwordTil.isErrorEnabled = false
     }
 
     override fun onDestroyView() {

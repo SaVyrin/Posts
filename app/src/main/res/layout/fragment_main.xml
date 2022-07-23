@@ -30,7 +30,7 @@
         tools:visibility="visible" />
 
     <include
-        android:id="@+id/main_list"
+        android:id="@+id/main_list_layout"
         layout="@layout/fragment_main_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
     <include
-        android:id="@+id/main_loader"
+        android:id="@+id/main_loader_layout"
         layout="@layout/fragment_main_loader"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
     <include
-        android:id="@+id/main_error_load"
+        android:id="@+id/main_error_load_layout"
         layout="@layout/fragment_main_error_load"
         android:layout_width="match_parent"
         android:layout_height="0dp"

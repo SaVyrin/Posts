@@ -54,7 +54,7 @@ class MainPostRecyclerViewAdapter(
 
         private fun setPostImage(item: Post) {
             val placeholder = getSmallPlaceholder(binding.root.context)
-            binding.postImage.load(item.photoUrl) {
+            binding.mainPostImage.load(item.photoUrl) {
                 crossfade(true)
                 placeholder(placeholder)
             }
@@ -62,7 +62,7 @@ class MainPostRecyclerViewAdapter(
 
         private fun setFeaturedImage(item: Post) {
             val featuredImageId = getCurrentFeaturedImageId(item)
-            binding.featuredImage.load(featuredImageId)
+            binding.mainHeartImage.load(featuredImageId)
         }
 
         private fun getCurrentFeaturedImageId(item: Post): Int {
@@ -76,7 +76,7 @@ class MainPostRecyclerViewAdapter(
             item: Post,
             featuredClickListener: (post: Post) -> Unit
         ) {
-            binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+            binding.mainHeartImage.setOnClickListener { featuredClickListener(item) }
         }
 
         private fun setNavigateClickListener(

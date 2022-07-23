@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_view"
+        android:id="@+id/search_til"
         style="@style/SearchTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="38dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_view_et"
+            android:id="@+id/search_edt"
             style="@style/SearchTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,9 +41,7 @@
             android:inputType="text"
             android:maxLength="255"
             android:maxLines="1"
-            android:paddingVertical="11dp"
-            tools:layout_editor_absoluteX="56dp"
-            tools:layout_editor_absoluteY="118dp" />
+            android:paddingVertical="11dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <include
@@ -56,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view" />
+        app:layout_constraintTop_toBottomOf="@id/search_til" />
 
     <include
         android:id="@+id/show_results_layout"
@@ -68,7 +66,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view" />
+        app:layout_constraintTop_toBottomOf="@id/search_til" />
 
     <include
         android:id="@+id/no_results_layout"
@@ -80,6 +78,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view" />
+        app:layout_constraintTop_toBottomOf="@id/search_til" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

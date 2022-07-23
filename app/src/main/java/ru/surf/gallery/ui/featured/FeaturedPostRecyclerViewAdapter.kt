@@ -72,7 +72,7 @@ class FeaturedPostRecyclerViewAdapter(
             item: Post,
             featuredClickListener: (post: Post) -> Unit
         ) {
-            binding.featuredImage.setOnClickListener { featuredClickListener(item) }
+            binding.featuredHeartImage.setOnClickListener { featuredClickListener(item) }
         }
 
         private fun setNavigateClickListener(

@@ -64,7 +64,7 @@ class FeaturedFragment : Fragment() {
     }
 
     private fun setRecyclerViewAdapter(featuredAdapter: FeaturedPostRecyclerViewAdapter) {
-        binding.list.adapter = featuredAdapter
+        binding.featuredList.adapter = featuredAdapter
     }
 
     private fun observeFeaturedPosts(featuredAdapter: FeaturedPostRecyclerViewAdapter) {
@@ -90,12 +90,12 @@ class FeaturedFragment : Fragment() {
     }
 
     private fun showFeaturedShowPostsScreenState() {
-        binding.list.isVisible = true
+        binding.featuredList.isVisible = true
         binding.noPostsLayout.root.isVisible = false
     }
 
     private fun showFeaturedNoPostsScreenState() {
-        binding.list.isVisible = false
+        binding.featuredList.isVisible = false
         binding.noPostsLayout.root.isVisible = true
     }
 

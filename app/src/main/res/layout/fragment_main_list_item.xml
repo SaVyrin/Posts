@@ -6,27 +6,29 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/post_image"
+        android:id="@+id/main_post_image"
         android:layout_width="0dp"
         android:layout_height="222dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:scaleType="centerCrop"
-        tools:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_launcher_background" />
 
     <ImageView
-        android:id="@+id/featured_image"
+        android:id="@+id/main_heart_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="9dp"
-        tools:src="@drawable/ic_heart_line"
-        app:layout_constraintEnd_toEndOf="@+id/post_image"
-        app:layout_constraintTop_toTopOf="@+id/post_image" />
+        app:layout_constraintEnd_toEndOf="@+id/main_post_image"
+        app:layout_constraintTop_toTopOf="@+id/main_post_image"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_heart_line" />
 
     <TextView
         android:id="@+id/post_title_tv"
@@ -41,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_image"
+        app:layout_constraintTop_toBottomOf="@id/main_post_image"
         app:layout_constraintVertical_bias="0.0"
         tools:text="Первый день в Surf" />
 </androidx.constraintlayout.widget.ConstraintLayout>

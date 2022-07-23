@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDao
 import ru.surf.gallery.utils.createUpdatedPost
@@ -32,14 +34,16 @@ class SearchViewModel @Inject constructor(
     }
 
     fun findMatchingPosts(text: String) {
-        searchText = text
+        viewModelScope.launch(Dispatchers.Default) {
+            searchText = text
 
-        var newPostsList = emptyList<Post>()
-        if (text.isNotEmpty()) {
-            newPostsList = getMatchingPosts(text)
-            mutablePostsToShow.value = newPostsList
+            var newPostsList = emptyList<Post>()
+            if (text.isNotEmpty()) {
+                newPostsList = getMatchingPosts(text)
+                mutablePostsToShow.postValue(newPostsList)
+            }
+            setSearchStatus(text, newPostsList)
         }
-        setSearchStatus(text, newPostsList)
     }
 
     private fun getMatchingPosts(text: String): List<Post> {
@@ -50,9 +54,9 @@ class SearchViewModel @Inject constructor(
 
     private fun setSearchStatus(text: String, newPostsList: List<Post>) {
         when {
-            text.isEmpty() -> mutableSearchStatus.value = SearchStatus.NOT_SEARCHING
-            newPostsList.isEmpty() -> mutableSearchStatus.value = SearchStatus.NO_RESULTS
-            else -> mutableSearchStatus.value = SearchStatus.SHOW_RESULTS
+            text.isEmpty() -> mutableSearchStatus.postValue(SearchStatus.NOT_SEARCHING)
+            newPostsList.isEmpty() -> mutableSearchStatus.postValue(SearchStatus.NO_RESULTS)
+            else -> mutableSearchStatus.postValue(SearchStatus.SHOW_RESULTS)
         }
     }
 

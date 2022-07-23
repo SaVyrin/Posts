@@ -28,7 +28,7 @@ class SearchViewModel @Inject constructor(
 
     fun setPostsToMatch(newPostsList: List<Post>) {
         postsToMatch = newPostsList
-        findMatchingPosts(searchText) // TODO это нужно чтобы сердечка сразу перекрашивалась
+        findMatchingPosts(searchText) // Для актуальности postsToShow при обновлении всего списка
     }
 
     fun findMatchingPosts(text: String) {

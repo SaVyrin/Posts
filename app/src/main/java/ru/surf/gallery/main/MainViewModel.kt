@@ -86,7 +86,7 @@ class MainViewModel @Inject constructor(
 
     private suspend fun addPostsToDb(postsReq: List<PostResponse>) {
         val postsToInsert = postsReq.map { it.toPost() }
-        postDao.insertAll(postsToInsert) // TODO так не скачет список, когда первый раз заносишь в бд
+        postDao.insertAll(postsToInsert)
     }
 
     fun featuredIconClicked(post: Post) {
@@ -99,7 +99,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun addToFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(true)) // TODO так сразу обновляется список
+        postDao.update(post.createUpdatedPost(true)) // так сразу обновляется список
     }
 
     private suspend fun removeFromFeatured(post: Post) {

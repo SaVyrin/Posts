@@ -9,14 +9,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
+import ru.surf.gallery.database.Post
 import ru.surf.gallery.database.PostDao
 import ru.surf.gallery.databinding.FragmentPostBinding
+import ru.surf.gallery.utils.getLargePlaceholder
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
 
-    @Inject lateinit var postDao: PostDao
+    @Inject
+    lateinit var postDao: PostDao
     private lateinit var postViewModelFactory: PostViewModelFactory
     private val viewModel: PostViewModel by viewModels { postViewModelFactory }
 
@@ -60,12 +63,32 @@ class PostFragment : Fragment() {
     private fun observePost() {
         viewModel.post.observe(viewLifecycleOwner) { post ->
             post?.let {
-                binding.nameTv.text = post.title
-                binding.content.text = post.content
-                binding.date.text = post.publicationDate
-                binding.image.load(post.photoUrl)
+                setPostTitle(post)
+                setPossImage(post)
+                setPostContent(post)
+                setPostPublicationDate(post)
             }
         }
+    }
+
+    private fun setPostTitle(post: Post) {
+        binding.postTitleTv.text = post.title
+    }
+
+    private fun setPossImage(post: Post) {
+        val placeholder = getLargePlaceholder(binding.root.context)
+        binding.postImage.load(post.photoUrl) {
+            crossfade(true)
+            placeholder(placeholder)
+        }
+    }
+
+    private fun setPostContent(post: Post) {
+        binding.postContentTv.text = post.content
+    }
+
+    private fun setPostPublicationDate(post: Post) {
+        binding.postPublicationDateTv.text = post.publicationDate
     }
 
     override fun onDestroy() {

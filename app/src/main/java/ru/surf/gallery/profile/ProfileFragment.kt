@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.gallery.R
@@ -16,6 +16,7 @@ import ru.surf.gallery.database.User
 import ru.surf.gallery.databinding.FragmentProfileBinding
 import ru.surf.gallery.dialog.ProfileConfirmationDialog
 import ru.surf.gallery.utils.formatPhone
+import ru.surf.gallery.utils.getSmallPlaceholder
 import ru.surf.gallery.utils.withQuotation
 
 @AndroidEntryPoint
@@ -73,12 +74,13 @@ class ProfileFragment : Fragment() {
 
     private fun setAvatar(user: User) {
         when (user.avatar.isEmpty()) {
-            true -> {
-                Glide.with(binding.root.context).load(R.drawable.ic_default_avatar)
-                    .into(binding.avatarImage)
-            }
+            true -> binding.avatarImage.load(R.drawable.ic_default_avatar)
             false -> {
-                Glide.with(binding.root.context).load(user.avatar).into(binding.avatarImage)
+                val placeholder = getSmallPlaceholder(binding.root.context)
+                binding.avatarImage.load(user.avatar) {
+                    crossfade(true)
+                    placeholder(placeholder)
+                }
             }
         }
     }

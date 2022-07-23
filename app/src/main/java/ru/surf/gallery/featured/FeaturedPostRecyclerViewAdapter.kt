@@ -39,7 +39,7 @@ class FeaturedPostRecyclerViewAdapter(
             featuredClickListener: (post: Post) -> Unit,
             navigateClickListener: (post: Post) -> Unit
         ) {
-            binding.name.text = item.title
+            binding.nameTv.text = item.title
             binding.content.text = item.content
             binding.image.load(item.photoUrl)
             binding.date.text = item.publicationDate

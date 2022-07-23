@@ -7,7 +7,7 @@
     tools:context=".profile.ProfileFragment">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -19,18 +19,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/avatar"
+        android:id="@+id/avatar_image"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="23dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
         tools:src="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/full_name_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -39,12 +39,12 @@
         android:textAppearance="@style/Text.Medium.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toEndOf="@+id/avatar_image"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
         tools:text="Александра Новикова" />
 
     <TextView
-        android:id="@+id/about"
+        android:id="@+id/about_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -53,12 +53,18 @@
         android:textAppearance="@style/Text.LightItalic.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toEndOf="@+id/avatar_image"
+        app:layout_constraintTop_toBottomOf="@id/full_name_tv"
         tools:text="“Светлое будущее живет в вечности”" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/city_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="city_label_tv,city_tv,city_separator" />
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/city_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -67,10 +73,10 @@
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar_image" />
 
     <TextView
-        android:id="@+id/city"
+        android:id="@+id/city_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -78,20 +84,26 @@
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/city_label_tv"
         tools:text="Санкт-Петербург" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/city_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/almost_transparent_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/city" />
+        app:layout_constraintTop_toBottomOf="@+id/city_tv" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/phone_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="phone_label_tv,phone_tv,phone_separator" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/phone_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -100,10 +112,10 @@
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/city_separator" />
 
     <TextView
-        android:id="@+id/phone"
+        android:id="@+id/phone_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -111,20 +123,26 @@
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/phone_label_tv"
         tools:text="+ 7 (961) 187 17 44" />
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/phone_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/almost_transparent_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
+        app:layout_constraintTop_toBottomOf="@+id/phone_tv" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/email_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="email_label_tv,email_tv,email_separator" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/email_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -133,10 +151,10 @@
         android:textAppearance="@style/Text.Regular.12"
         android:textColor="@color/profile_sub_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view1" />
+        app:layout_constraintTop_toBottomOf="@+id/phone_separator" />
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/email_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -144,17 +162,17 @@
         android:textAppearance="@style/Text.Regular.18"
         android:textColor="@color/profile_main_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/email_label_tv"
         tools:text="alexandra@surfstudio.ru" />
 
     <View
-        android:id="@+id/view2"
+        android:id="@+id/email_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/almost_transparent_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/email_tv" />
 
     <ru.surf.gallery.views.LoaderButton
         android:id="@+id/logout_btn"

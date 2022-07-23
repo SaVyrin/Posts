@@ -7,10 +7,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.surf.gallery.database.PostDao
-import ru.surf.gallery.database.PostDatabase
-import ru.surf.gallery.database.UserDao
-import ru.surf.gallery.database.UserTokenDao
+import ru.surf.gallery.data.database.PostDao
+import ru.surf.gallery.data.database.PostDatabase
+import ru.surf.gallery.data.database.UserDao
+import ru.surf.gallery.data.database.UserTokenDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

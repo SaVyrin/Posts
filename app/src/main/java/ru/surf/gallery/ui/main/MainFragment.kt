@@ -178,7 +178,7 @@ class MainFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             )
             .setAnchorView(
-                requireActivity().findViewById(R.id.bottomNavigationView3)
+                requireActivity().findViewById(R.id.bottom_navigation_view)
             )
             .show()
     }

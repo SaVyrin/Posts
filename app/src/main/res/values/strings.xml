@@ -10,6 +10,7 @@
     <string name="post_title">Галерея</string>
     <string name="featured_title">Мои избранные</string>
     <string name="profile_title">Профиль</string>
+    <string name="search_title">Поиск</string>
 
     <string name="btn_login">Войти</string>
     <string name="btn_logout">Выйти</string>

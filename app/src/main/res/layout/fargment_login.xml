@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/title_tv"
+        android:id="@+id/login_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login"
+        android:id="@+id/login_til"
         style="@style/LoginTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,22 +29,22 @@
         android:hint="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_tv">
+        app:layout_constraintTop_toBottomOf="@id/login_title_tv">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_login"
+            android:id="@+id/login_edt"
             style="@style/LoginTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:inputType="phone"
             android:maxLines="1"
-            android:nextFocusDown="@id/password" />
+            android:nextFocusDown="@id/password_edt" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password"
+        android:id="@+id/password_til"
         style="@style/LoginTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,12 +54,12 @@
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/login_til"
         app:passwordToggleDrawable="@drawable/show_password_selector"
         tools:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_password"
+            android:id="@+id/password_edt"
             style="@style/LoginTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,14 +73,14 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginBottom="50dp"
         android:src="@drawable/ic_surf_edu_login"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/login_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ru.surf.gallery.common.views.LoaderButton
-        android:id="@+id/btn_login"
+        android:id="@+id/login_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 

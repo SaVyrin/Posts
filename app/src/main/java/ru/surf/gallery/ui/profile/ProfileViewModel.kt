@@ -47,6 +47,7 @@ class ProfileViewModel @Inject constructor(
                     else -> mutableLogoutStatus.value = LogoutStatus.ERROR
                 }
             } catch (error: Throwable) {
+                error.printStackTrace()
                 mutableLogoutStatus.value = LogoutStatus.ERROR
             }
         }

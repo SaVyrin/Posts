@@ -69,6 +69,7 @@ class LoginViewModel @Inject constructor(
                         }
                     }
                 } catch (error: Throwable) {
+                    error.printStackTrace()
                     mutableLoginStatus.value = LoginStatus.ERROR_INTERNET
                 }
             }

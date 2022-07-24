@@ -41,6 +41,7 @@ class MainViewModel @Inject constructor(
                 mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
                 getPostsFromServer()
             } catch (error: Throwable) {
+                error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
             }
         }
@@ -52,6 +53,7 @@ class MainViewModel @Inject constructor(
                 mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
                 getPostsFromServer()
             } catch (error: Throwable) {
+                error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
             }
         }

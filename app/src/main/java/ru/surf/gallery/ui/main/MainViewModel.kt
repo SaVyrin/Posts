@@ -6,20 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Response
-import ru.surf.gallery.data.database.*
-import ru.surf.gallery.data.network.NetworkApi
-import ru.surf.gallery.data.network.PostResponse
-import ru.surf.gallery.utils.createUpdatedPost
-import ru.surf.gallery.utils.toPost
+import ru.surf.gallery.data.database.Post
+import ru.surf.gallery.data.database.PostDao
+import ru.surf.gallery.data.database.UserToken
+import ru.surf.gallery.data.database.UserTokenDao
+import ru.surf.gallery.domain.PostsRepository
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userTokenDao: UserTokenDao,
-    private val userDao: UserDao,
-    private val postDao: PostDao,
-    private val networkApi: NetworkApi
+    userTokenDao: UserTokenDao,
+    postDao: PostDao,
+    @Named("network_posts") private val postsRepository: PostsRepository
 ) : ViewModel() {
 
     val userTokenFromDao = userTokenDao.get()
@@ -39,7 +38,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
-                getPostsFromServer()
+                val newPostsRequestStatus = postsRepository.getPosts(userToken)
+                mutablePostsRequestStatus.value = newPostsRequestStatus
             } catch (error: Throwable) {
                 error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
@@ -51,7 +51,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
-                getPostsFromServer()
+                val newPostsRequestStatus = postsRepository.getPosts(userToken)
+                mutablePostsRequestStatus.value = newPostsRequestStatus
             } catch (error: Throwable) {
                 error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
@@ -59,69 +60,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPostsFromServer() {
-        val postsResponse = sendPostsRequest(userToken)
-        when {
-            postsResponse.code() == 401 -> {
-                clearUserData()
-                mutablePostsRequestStatus.value = PostsRequestStatus.UNAUTHORIZED
-            }
-            postsResponse.body().isNullOrEmpty() -> {
-                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
-            }
-            postsResponse.isSuccessful -> {
-                postsResponse.body()?.let {
-                    addPostsToDb(it)
-                    mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
-                }
-            }
-            else -> {
-                mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
-            }
-        }
-    }
-
-    private suspend fun sendPostsRequest(userToken: String): Response<List<PostResponse>> {
-        return networkApi.getPosts("Token $userToken")
-    }
-
-    private suspend fun addPostsToDb(postsReq: List<PostResponse>) {
-        val postsToInsert = postsReq.map { it.toPost() }
-        postDao.insertAll(postsToInsert)
-    }
-
     fun featuredIconClicked(post: Post) {
         viewModelScope.launch {
             when (post.inFeatured) {
-                true -> removeFromFeatured(post)
-                false -> addToFeatured(post)
+                true -> postsRepository.removeFromFeatured(post)
+                false -> postsRepository.addToFeatured(post)
             }
         }
-    }
-
-    private suspend fun addToFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(true)) // так сразу обновляется список
-    }
-
-    private suspend fun removeFromFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(false))
-    }
-
-    private suspend fun clearUserData() {
-        removeUserTokenFromDb()
-        removeUserInfoFromDb()
-        removePostsFromDb()
-    }
-
-    private suspend fun removeUserTokenFromDb() {
-        userTokenDao.deleteAll()
-    }
-
-    private suspend fun removeUserInfoFromDb() {
-        userDao.deleteAll()
-    }
-
-    private suspend fun removePostsFromDb() {
-        postDao.deleteAll()
     }
 }

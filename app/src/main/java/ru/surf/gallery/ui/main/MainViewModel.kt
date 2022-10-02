@@ -6,31 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.surf.gallery.data.database.Post
-import ru.surf.gallery.data.database.PostDao
-import ru.surf.gallery.data.database.UserToken
-import ru.surf.gallery.data.database.UserTokenDao
+import ru.surf.gallery.data.database.*
 import ru.surf.gallery.domain.PostsRepository
+import ru.surf.gallery.domain.PostsRepositoryVSUImpl
 import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     userTokenDao: UserTokenDao,
-    postDao: PostDao,
-    @Named("network_posts") private val postsRepository: PostsRepository
+    private val postsRepository: PostsRepositoryVSUImpl
 ) : ViewModel() {
 
-    val userTokenFromDao = userTokenDao.get()
-    private var userToken = ""
+    val user = userTokenDao.get()
+    private var userId = ""
 
     private val mutablePostsRequestStatus = MutableLiveData<PostsRequestStatus>()
     val postsRequestStatus: LiveData<PostsRequestStatus> = mutablePostsRequestStatus
 
-    val posts = postDao.getAll()
+    val posts = MutableLiveData<List<Post>>()
 
-    fun setUserToken(tokenFromDao: UserToken) {
-        userToken = tokenFromDao.token
+    fun setUserId(userFromDao: UserToken) {
+        userId = userFromDao.token
         getPosts()
     }
 
@@ -38,8 +35,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.LOADING
-                val newPostsRequestStatus = postsRepository.getPosts(userToken)
-                mutablePostsRequestStatus.value = newPostsRequestStatus
+                posts.value = postsRepository.getPosts(userId)
+                mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
             } catch (error: Throwable) {
                 error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_LOAD
@@ -51,8 +48,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 mutablePostsRequestStatus.value = PostsRequestStatus.REFRESHING
-                val newPostsRequestStatus = postsRepository.getPosts(userToken)
-                mutablePostsRequestStatus.value = newPostsRequestStatus
+                posts.value = postsRepository.getPosts(userId)
+                mutablePostsRequestStatus.value = PostsRequestStatus.SUCCESS
             } catch (error: Throwable) {
                 error.printStackTrace()
                 mutablePostsRequestStatus.value = PostsRequestStatus.ERROR_REFRESH
@@ -63,9 +60,10 @@ class MainViewModel @Inject constructor(
     fun featuredIconClicked(post: Post) {
         viewModelScope.launch {
             when (post.inFeatured) {
-                true -> postsRepository.removeFromFeatured(post)
-                false -> postsRepository.addToFeatured(post)
+                true -> postsRepository.removeFromFeatured(userId, post)
+                false -> postsRepository.addToFeatured(userId, post)
             }
+            posts.value = postsRepository.getPosts(userId)
         }
     }
 }

@@ -9,23 +9,38 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.gallery.data.database.Post
 import ru.surf.gallery.data.database.PostDao
+import ru.surf.gallery.data.database.UserToken
+import ru.surf.gallery.data.database.UserTokenDao
+import ru.surf.gallery.domain.PostsRepositoryVSUImpl
 import ru.surf.gallery.utils.createUpdatedPost
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val postDao: PostDao
+    private val userTokenDao: UserTokenDao,
+    private val postDao: PostDao,
+    private val postsRepository: PostsRepositoryVSUImpl
 ) : ViewModel() {
 
     private val mutableSearchStatus = MutableLiveData(SearchStatus.NOT_SEARCHING)
     val searchStatus: LiveData<SearchStatus> = mutableSearchStatus
 
-    val postsFromDao = postDao.getAll()
+    val postsFromDao = MutableLiveData<List<Post>>()
     private var postsToMatch = listOf<Post>()
     private val mutablePostsToShow = MutableLiveData<List<Post>>()
     val postsToShow: LiveData<List<Post>> = mutablePostsToShow
 
+    val user = userTokenDao.get()
+    private var userId = ""
+
     private var searchText = ""
+
+    fun setUserId(userFromDao: UserToken) {
+        userId = userFromDao.token
+        viewModelScope.launch {
+            postsFromDao.value = postsRepository.getPosts(userId)
+        }
+    }
 
     fun setPostsToMatch(newPostsList: List<Post>) {
         postsToMatch = newPostsList
@@ -65,14 +80,15 @@ class SearchViewModel @Inject constructor(
                 true -> removeFromFeatured(post)
                 false -> addToFeatured(post)
             }
+            postsFromDao.value = postsRepository.getPosts(userId)
         }
     }
 
     private suspend fun addToFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(true))
+        postsRepository.addToFeatured(userId, post)
     }
 
     private suspend fun removeFromFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(false))
+        postsRepository.removeFromFeatured(userId, post)
     }
 }

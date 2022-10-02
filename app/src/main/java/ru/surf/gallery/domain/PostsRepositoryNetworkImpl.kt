@@ -1,14 +1,10 @@
 package ru.surf.gallery.domain
 
 import retrofit2.Response
-import ru.surf.gallery.data.database.Post
-import ru.surf.gallery.data.database.PostDao
-import ru.surf.gallery.data.database.UserDao
-import ru.surf.gallery.data.database.UserTokenDao
+import ru.surf.gallery.data.database.*
 import ru.surf.gallery.data.network.NetworkApi
 import ru.surf.gallery.data.network.PostResponse
 import ru.surf.gallery.ui.main.PostsRequestStatus
-import ru.surf.gallery.utils.createUpdatedPost
 import ru.surf.gallery.utils.toPost
 
 class PostsRepositoryNetworkImpl(
@@ -41,13 +37,22 @@ class PostsRepositoryNetworkImpl(
         return postsRequestStatus
     }
 
-
-    override suspend fun addToFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(true)) // так сразу обновляется список
+    override suspend fun getFeaturedPosts(userId: String): List<Post> {
+        val featuredPostsIds = postDao.getFeaturedPostsIdsAndDates(userId)
+        return postDao.getFeaturedPosts(featuredPostsIds.map { it.postId })
     }
 
-    override suspend fun removeFromFeatured(post: Post) {
-        postDao.update(post.createUpdatedPost(false))
+
+    override suspend fun addToFeatured(userId: String, post: Post) {
+        postDao.addToFeatured(
+            PostInFeatured(userId, post.id)
+        )
+    }
+
+    override suspend fun removeFromFeatured(userId: String, post: Post) {
+        postDao.deleteFromFeatured(
+            PostInFeatured(userId, post.id)
+        )
     }
 
     private suspend fun sendPostsRequest(userToken: String): Response<List<PostResponse>> {
@@ -59,7 +64,7 @@ class PostsRepositoryNetworkImpl(
         postDao.insertAll(postsToInsert)
     }
 
-    private suspend fun clearUserData() {
+    override suspend fun clearUserData() {
         removeUserTokenFromDb()
         removeUserInfoFromDb()
         removePostsFromDb()
@@ -74,6 +79,6 @@ class PostsRepositoryNetworkImpl(
     }
 
     private suspend fun removePostsFromDb() {
-        postDao.deleteAll()
+        postDao.deleteAllPosts()
     }
 }

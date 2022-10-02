@@ -33,7 +33,7 @@ fun PostResponse.toPost(): Post {
         title,
         content,
         photoUrl,
-        convertLongToTime(publicationDate)
+        publicationDate.toDateFormat()
     )
 }
 
@@ -50,8 +50,8 @@ fun Post.createUpdatedPost(inFeatured: Boolean): Post {
     )
 }
 
-private fun convertLongToTime(time: Long): String {
-    val date = Date(time)
+fun Long.toDateFormat(): String {
+    val date = Date(this)
     val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
     return dateFormatter.format(date)
 }

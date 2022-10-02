@@ -6,20 +6,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.surf.gallery.data.database.Post
-import ru.surf.gallery.data.database.PostDao
+import ru.surf.gallery.data.database.*
+import ru.surf.gallery.domain.PostsRepository
+import ru.surf.gallery.domain.PostsRepositoryVSUImpl
 import ru.surf.gallery.utils.createUpdatedPost
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class FeaturedViewModel @Inject constructor(
-    private val postDao: PostDao
+    private val postsRepository: PostsRepositoryVSUImpl,
+    private val postDao: PostDao,
+    private val userTokenDao: UserTokenDao
 ) : ViewModel() {
 
     private val mutableFeaturedScreenState = MutableLiveData(FeaturedState.NO_POSTS)
     val featuredScreenState: LiveData<FeaturedState> = mutableFeaturedScreenState
 
-    val featuredPosts = postDao.getFeaturedPosts()
+    val user = userTokenDao.get()
+    var userId = ""
+    var featuredPosts = MutableLiveData<List<Post>>()
+
 
     fun setFeaturedScreenState(currentPosts: List<Post>) {
         when (currentPosts.isEmpty()) {
@@ -28,9 +35,16 @@ class FeaturedViewModel @Inject constructor(
         }
     }
 
+    fun getPosts(userId: String) {
+        viewModelScope.launch {
+            featuredPosts.value = postsRepository.getFeaturedPosts(userId)
+        }
+    }
+
     fun removePostFromFeatured(post: Post) {
         viewModelScope.launch {
-            postDao.update(post.createUpdatedPost(false))
+            postsRepository.removeFromFeatured(userId, post)
+            featuredPosts.value = postsRepository.getFeaturedPosts(userId)
         }
     }
 }

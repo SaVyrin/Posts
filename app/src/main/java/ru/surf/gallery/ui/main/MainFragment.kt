@@ -39,7 +39,7 @@ class MainFragment : Fragment() {
         setErrorLoadButtonClickListener()
         setRefreshLayoutListener()
 
-        observeUserToken()
+        observeUser()
         observePostsRequestStatus()
     }
 
@@ -104,10 +104,10 @@ class MainFragment : Fragment() {
         viewModel.refreshPosts()
     }
 
-    private fun observeUserToken() {
-        viewModel.userTokenFromDao.observe(viewLifecycleOwner) { userToken ->
-            userToken?.let {
-                viewModel.setUserToken(userToken)
+    private fun observeUser() {
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            user?.let{
+                viewModel.setUserId(user)
             }
         }
     }

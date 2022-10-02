@@ -27,6 +27,18 @@ object RepositoryModule {
         return UserRepositoryNetworkImpl(networkApi, userTokenDao, userDao, postDao)
     }
 
+
+    @Provides
+    @Named("vsu_user")
+    fun provideVSUUserRepository(
+        networkApi: NetworkApi,
+        userTokenDao: UserTokenDao,
+        userDao: UserDao,
+        postDao: PostDao
+    ): UserRepository {
+        return UserRepositoryVSUImpl(networkApi, userTokenDao, userDao, postDao)
+    }
+
     @Provides
     @Named("network_posts")
     fun provideNetworkPostsRepository(
@@ -36,5 +48,15 @@ object RepositoryModule {
         postDao: PostDao
     ): PostsRepository {
         return PostsRepositoryNetworkImpl(networkApi, userTokenDao, userDao, postDao)
+    }
+
+    @Provides
+    fun provideVSUPostsRepository(
+        networkApi: NetworkApi,
+        userTokenDao: UserTokenDao,
+        userDao: UserDao,
+        postDao: PostDao
+    ): PostsRepositoryVSUImpl {
+        return PostsRepositoryVSUImpl(networkApi, userTokenDao, userDao, postDao)
     }
 }

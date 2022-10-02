@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.surf.gallery.data.database.User
 import ru.surf.gallery.data.database.UserDao
 import ru.surf.gallery.data.database.UserToken
 import ru.surf.gallery.data.database.UserTokenDao
@@ -16,19 +17,22 @@ import javax.inject.Named
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     userTokenDao: UserTokenDao,
-    userDao: UserDao,
+    val userDao: UserDao,
     @Named("network_user") private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val mutableLogoutStatus = MutableLiveData(LogoutStatus.NOT_LOGGED_OUT)
     val logoutStatus: LiveData<LogoutStatus> = mutableLogoutStatus
 
-    val user = userDao.get()
+    val user = MutableLiveData<User>()
     val userToken = userTokenDao.get()
     private var token = ""
 
     fun setUserToken(newUserToken: UserToken) {
         token = newUserToken.token
+        viewModelScope.launch {
+            user.value = userDao.getById(token)
+        }
     }
 
     fun logOutUser() {

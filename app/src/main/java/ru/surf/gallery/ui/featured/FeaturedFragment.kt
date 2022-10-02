@@ -34,6 +34,7 @@ class FeaturedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         observeFeaturedScreenState()
+        observeUser()
     }
 
     private fun initRecyclerView() {
@@ -97,6 +98,15 @@ class FeaturedFragment : Fragment() {
     private fun showFeaturedNoPostsScreenState() {
         binding.featuredList.isVisible = false
         binding.noPostsLayout.root.isVisible = true
+    }
+
+    private fun observeUser() {
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                viewModel.getPosts(user.token)
+                viewModel.userId = user.token
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -42,6 +42,7 @@ class SearchFragment : Fragment() {
         initRecyclerView()
         addRecyclerViewOnScrollListener()
 
+        observeUser()
         observePostsFromDao()
         observeSearchStatus()
     }
@@ -110,6 +111,14 @@ class SearchFragment : Fragment() {
         viewModel.postsToShow.observe(viewLifecycleOwner) { posts ->
             posts?.let {
                 mainAdapter.submitList(posts)
+            }
+        }
+    }
+
+    private fun observeUser() {
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                viewModel.setUserId(user)
             }
         }
     }

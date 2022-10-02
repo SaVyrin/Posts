@@ -18,6 +18,12 @@ interface UserDao {
     @Query("SELECT * FROM user_table LIMIT 1")
     fun get(): LiveData<User>
 
+    @Query("SELECT * FROM user_table WHERE user_phone = :login")
+    suspend fun getByLogin(login: String): User
+
+    @Query("SELECT * FROM user_table WHERE user_id = :userId")
+    suspend fun getById(userId: String): User
+
     @Query("DELETE FROM user_table")
     suspend fun deleteAll()
 }

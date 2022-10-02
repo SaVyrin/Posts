@@ -5,6 +5,8 @@ import ru.surf.gallery.ui.main.PostsRequestStatus
 
 interface PostsRepository {
     suspend fun getPosts(userToken: String): PostsRequestStatus
-    suspend fun addToFeatured(post: Post)
-    suspend fun removeFromFeatured(post: Post)
+    suspend fun getFeaturedPosts(userId: String): List<Post>
+    suspend fun addToFeatured(userId: String, post: Post)
+    suspend fun removeFromFeatured(userId: String, post: Post)
+    suspend fun clearUserData()
 }

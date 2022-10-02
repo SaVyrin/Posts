@@ -4,7 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Post::class, User::class, UserToken::class],
+    entities = [
+        Post::class,
+        User::class,
+        UserToken::class,
+        PostInFeatured::class,
+        UserPost::class
+    ],
     version = 1,
     exportSchema = false
 )

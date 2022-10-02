@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initVSUDb()
         initLoginMask()
         setLoginButtonClickListener()
         observePasswordFieldChange()
@@ -44,6 +44,10 @@ class LoginFragment : Fragment() {
         observeLoginStatus()
         observeLoginFieldStatus()
         observePasswordFieldStatus()
+    }
+
+    private fun initVSUDb() {
+        viewModel.initVSUDB()
     }
 
     private fun initLoginMask() {

@@ -8,34 +8,19 @@ import ru.surf.gallery.data.network.LogoutResponse
 import ru.surf.gallery.data.network.NetworkApi
 import ru.surf.gallery.ui.login.LoginStatus
 import ru.surf.gallery.ui.profile.LogoutStatus
-import ru.surf.gallery.utils.toUser
-import ru.surf.gallery.utils.toUserToken
 
-class UserRepositoryNetworkImpl(
+
+class UserRepositoryVSUImpl(
     private val networkApi: NetworkApi,
     private val userTokenDao: UserTokenDao,
     private val userDao: UserDao,
     private val postDao: PostDao
 ) : UserRepository {
     override suspend fun login(login: String, password: String): LoginStatus {
-        val loginResponse = sendLoginRequest(login, password)
-        var loginStatus = LoginStatus.IN_PROGRESS
-        when {
-            loginResponse.code() == 400 -> {
-                loginStatus = LoginStatus.ERROR_WRONG_DATA
-            }
-            loginResponse.isSuccessful -> {
-                loginResponse.body()?.let {
-                    addTokenToDb(it.token.toUserToken())
-                    addUserToDb(it.userInfo.toUser())
-                    loginStatus = LoginStatus.LOGGED_IN
-                }
-            }
-            else -> {
-                loginStatus = LoginStatus.ERROR_INTERNET
-            }
-        }
-        return loginStatus
+        val userWithSameLogin = userDao.getByLogin("+7$login")
+        val userId = userWithSameLogin.id
+        addTokenToDb(UserToken(userId))
+        return LoginStatus.LOGGED_IN
     }
 
     override suspend fun logout(token: String): LogoutStatus {
@@ -86,5 +71,7 @@ class UserRepositoryNetworkImpl(
 
     private suspend fun removePostsFromDb() {
         postDao.deleteAllPosts()
+        postDao.deleteAllUserPosts()
+        postDao.deleteAllFeaturedPosts()
     }
 }

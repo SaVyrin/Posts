@@ -18,7 +18,7 @@ import javax.inject.Named
 class ProfileViewModel @Inject constructor(
     userTokenDao: UserTokenDao,
     val userDao: UserDao,
-    @Named("network_user") private val userRepository: UserRepository
+    @Named("vsu_user") private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val mutableLogoutStatus = MutableLiveData(LogoutStatus.NOT_LOGGED_OUT)

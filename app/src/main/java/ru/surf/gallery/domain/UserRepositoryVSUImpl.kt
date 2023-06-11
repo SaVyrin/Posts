@@ -24,15 +24,8 @@ class UserRepositoryVSUImpl(
     }
 
     override suspend fun logout(token: String): LogoutStatus {
-        val logoutResponse = sendLogoutRequest(token)
-        val logoutStatus = when (logoutResponse.code()) {
-            204, 401 -> {
-                clearUserData()
-                LogoutStatus.LOGGED_OUT
-            }
-            else -> LogoutStatus.ERROR
-        }
-        return logoutStatus
+        clearUserData()
+        return LogoutStatus.LOGGED_OUT
     }
 
     private suspend fun sendLoginRequest(
